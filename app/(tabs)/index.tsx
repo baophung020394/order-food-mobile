@@ -1,150 +1,138 @@
-import { Link } from "expo-router";
-import { useState } from "react";
+import tablesDataRaw from "@/services/fake-data/tables.json";
+import usersData from "@/services/fake-data/users.json";
+import { useRouter } from "expo-router";
+import { LogOut, Users, UtensilsCrossed } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import {
-    Dimensions,
-    FlatList,
     Pressable,
     ScrollView,
     Text,
+    TouchableOpacity,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
-const TABLE_STATUS = [
-  { key: "all", label: "All", color: "#F57C00" },
-  { key: "available", label: "Available", color: "#4CAF50" },
-  { key: "reserved", label: "Reserved", color: "#FFB300" },
-  { key: "running", label: "Running", color: "#2196F3" },
-];
-
-type TableStatus = "available" | "reserved" | "running";
-
-const TABLES = [
-  { id: 1, code: "T-01", seats: 4, status: "available" },
-  { id: 2, code: "T-02", seats: 2, status: "reserved" },
-  { id: 3, code: "T-03", seats: 6, status: "running" },
-  { id: 4, code: "T-04", seats: 2, status: "available" },
-  { id: 5, code: "T-05", seats: 4, status: "reserved" },
-  { id: 6, code: "T-06", seats: 8, status: "available" },
-  { id: 7, code: "T-07", seats: 4, status: "running" },
-  { id: 8, code: "T-08", seats: 8, status: "available" },
-  { id: 9, code: "T-09", seats: 2, status: "reserved" },
-  { id: 10, code: "T-10", seats: 4, status: "available" },
-  { id: 11, code: "T-11", seats: 2, status: "running" },
-  { id: 12, code: "T-12", seats: 6, status: "reserved" },
-  { id: 13, code: "T-13", seats: 4, status: "available" },
-  { id: 14, code: "T-14", seats: 2, status: "running" },
-  { id: 15, code: "T-15", seats: 8, status: "available" },
-  { id: 16, code: "T-16", seats: 6, status: "reserved" },
-];
-
-const statusColor: Record<TableStatus, string> = {
-  available: "#4CAF50",
-  reserved: "#FFB300",
-  running: "#2196F3",
+const statusConfig = {
+  available: { label: "Trống", bg: "#4CAF50" },
+  occupied: { label: "Có khách", bg: "#FF9800" },
+  reserved: { label: "Đã đặt", bg: "#2196F3" },
+  dirty: { label: "Dọn dẹp", bg: "#F44336" },
 };
-// Số cột grid
-const NUM_COLUMNS = 3;
-const ITEM_MARGIN = 8;
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const ITEM_WIDTH =
-  (SCREEN_WIDTH - 2 * 12 - (NUM_COLUMNS - 1) * ITEM_MARGIN) / NUM_COLUMNS;
 
-export default function Index() {
-  const [filter, setFilter] = useState("all");
-  const [selected, setSelected] = useState<number | null>(null);
+type TableStatus = keyof typeof statusConfig;
 
-  const filteredTables =
-    filter === "all" ? TABLES : TABLES.filter((t) => t.status === filter);
+type Table = {
+  id: string;
+  table_number: string;
+  seats: number;
+  location: string;
+  status: TableStatus;
+  current_order_id: string | null;
+};
+
+export default function Dashboard() {
+  const [user, setUser] = useState<any>(null);
+  const [tables, setTables] = useState<Table[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Lấy user từ user mẫu, thực tế lấy từ AsyncStorage hoặc context
+    const demoUser = usersData[0];
+    setUser(demoUser);
+    const safeTables = (tablesDataRaw as any[]).map(table => ({
+      ...table,
+      status: table.status as TableStatus,
+    })) as Table[];
+    setTables(safeTables);
+  }, []);
+
+  // Group by location
+  const groupedTables = tables.reduce((acc: Record<string, Table[]>, table) => {
+    if (!acc[table.location]) acc[table.location] = [];
+    acc[table.location].push(table);
+    return acc;
+  }, {});
+
+  const handleLogout = () => {
+    Toast.show({
+      type: "success",
+      text1: "Đăng xuất thành công",
+    });
+    router.replace("/(auth)/sign-in");
+  };
+
+  const handleTableClick = (table: Table) => {
+    router.push(`/table/${table.id}`);
+  };
 
   return (
-    <SafeAreaView className="flex-1 pb-52">
-      <View>
-        <Text className="text-2xl font-bold text-black text-center py-6">
-          Tables
-        </Text>
+    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
+      {/* Header */}
+      <View className="border-b bg-white shadow-sm flex-row items-center justify-between px-4 py-4">
+        <View className="flex-row items-center gap-x-3">
+          <View className="w-10 h-10 bg-[#388E3C] rounded-full items-center justify-center mr-3">
+            <UtensilsCrossed color="#fff" size={22} />
+          </View>
+          <View>
+            <Text className="text-xl font-bold text-[#222]">Restaurant POS</Text>
+            <Text className="text-sm text-gray-500">{user?.full_name}</Text>
+          </View>
+        </View>
+        <TouchableOpacity className="flex-row items-center border border-[#E0E0E0] rounded-md px-3 py-2" onPress={handleLogout}>
+          <LogOut size={18} color="#222" className="mr-1" />
+          <Text className="text-sm font-medium ml-1">Đăng xuất</Text>
+        </TouchableOpacity>
       </View>
-      <View className="flex flex-col bg-[#F8F8F8] pt-4">
-        {/* Bộ lọc trạng thái */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="px-4 mb-3 flex-row gap-2"
-        >
-          {TABLE_STATUS.map((st) => (
-            <Pressable
-              key={st.key}
-              onPress={() => setFilter(st.key)}
-              style={{
-                backgroundColor: filter === st.key ? st.color : "#fff",
-                borderColor: st.color,
-                borderWidth: 1,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-                borderRadius: 24,
-                marginRight: 8,
-              }}
-              className="flex items-center"
-            >
-              <Text
-                style={{
-                  color: filter === st.key ? "#fff" : st.color,
-                  fontWeight: "bold",
-                }}
-              >
-                {st.label}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-        {/* Grid bàn ăn dùng FlatList */}
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          data={filteredTables}
-          renderItem={({ item }) => {
-            const isSelected = selected === item.id;
-            const borderColor =
-              statusColor[item.status as TableStatus] || "#E0E0E0";
+      {/* Content */}
+      <ScrollView className="flex-1 px-3 pb-5" contentContainerStyle={{ paddingBottom: 24 }}>
+        {/* Stats */}
+        <View className="flex-row flex-wrap mt-6 mb-4 justify-between gap-y-3">
+          {Object.entries(statusConfig).map(([status, config]) => {
+            const count = tables.filter((t) => t.status === status).length;
             return (
-              <Link href={`/table/${item.id}`} asChild>
-                <Pressable
-                  key={item.id}
-                  onPress={() => setSelected(item.id)}
-                  style={{
-                    width: ITEM_WIDTH,
-                    marginBottom: ITEM_MARGIN,
-                    marginRight: ITEM_MARGIN,
-                    backgroundColor: isSelected ? "#E3F2FD" : "#fff",
-                    borderColor: isSelected ? "#1976D2" : borderColor,
-                    borderWidth: isSelected ? 3 : 2,
-                    borderRadius: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    aspectRatio: 1,
-                  }}
-                >
-                  <Text
-                    style={{ color: "#111", fontWeight: "700", fontSize: 18 }}
-                  >
-                    {item.code}
-                  </Text>
-                  <Text style={{ color: "#888", fontSize: 13 }}>
-                    {item.seats} seats
-                  </Text>
-                </Pressable>
-              </Link>
+              <View key={status} className="w-[47%] bg-white rounded-xl p-4 flex-row items-center justify-between shadow-sm mb-2" style={{marginBottom: 10, minWidth: 140}}>
+                <View>
+                  <Text className="text-sm text-gray-400">{config.label}</Text>
+                  <Text className="text-2xl font-bold mt-1">{count}</Text>
+                </View>
+                <View style={{ backgroundColor: config.bg, width: 18, height: 18, borderRadius: 9 }} />
+              </View>
             );
-          }}
-          keyExtractor={(item) => String(item.id)}
-          numColumns={NUM_COLUMNS}
-          contentContainerStyle={{
-            paddingHorizontal: 12,
-            paddingBottom: 36,
-            paddingTop: 6,
-          }}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+          })}
+        </View>
+        {/* By location group */}
+        {Object.entries(groupedTables).map(([location, locationTables]) => (
+          <View key={location} className="mt-3">
+            <View className="flex-row gap-2 items-center mb-4">
+              <Users size={18} color="#222" />
+              <Text className="text-lg font-semibold capitalize">Khu vực: {location}</Text>
+            </View>
+            <View className="flex-row flex-wrap gap-x-3">
+              {(locationTables as Table[]).map((table) => {
+                const config = statusConfig[table.status as TableStatus];
+                return (
+                  <Pressable
+                    key={table.id}
+                    onPress={() => handleTableClick(table)}
+                    className="mb-3"
+                    style={{ minWidth: 105, width: 108, backgroundColor: config.bg, borderRadius: 16, marginRight: 12, shadowColor: '#aaa', shadowOpacity: 0.08, elevation: 2 }}
+                  >
+                    <View className="p-4 items-center justify-center">
+                      <Text className="text-2xl font-bold text-white mb-1">{table.table_number}</Text>
+                      <View className="flex-row items-center bg-white/20 rounded-full px-3 py-0.5 mb-1 mt-1">
+                        <Users size={14} color="#fff" style={{marginRight: 4}} />
+                        <Text className="ml-1 text-xs text-white font-semibold">{table.seats} chỗ</Text>
+                      </View>
+                      <Text className="text-white text-xs font-medium mt-1">{config.label}</Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 }

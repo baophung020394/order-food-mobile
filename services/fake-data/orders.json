@@ -1,0 +1,124 @@
+[
+  {
+    "id": "order-1",
+    "table_id": "table-2",
+    "created_by": "user-2",
+    "status": "in_kitchen",
+    "subtotal": 44.98,
+    "tax": 4.5,
+    "discount": 0,
+    "total": 49.48,
+    "notes": "Anniversary celebration",
+    "metadata": { "source": "staff" },
+    "created_at": "2024-01-15T18:30:00Z",
+    "updated_at": "2024-01-15T18:35:00Z",
+    "items": [
+      {
+        "id": "item-1",
+        "order_id": "order-1",
+        "menu_item_id": "menu-1",
+        "menu_snapshot": {
+          "id": "menu-1",
+          "name": "Grilled Salmon",
+          "price": 25.99,
+          "category": "main"
+        },
+        "quantity": 1,
+        "unit_price": 25.99,
+        "note": "medium rare",
+        "status": "preparing"
+      },
+      {
+        "id": "item-2",
+        "order_id": "order-1",
+        "menu_item_id": "menu-2",
+        "menu_snapshot": {
+          "id": "menu-2",
+          "name": "Margherita Pizza",
+          "price": 15.99,
+          "category": "main"
+        },
+        "quantity": 1,
+        "unit_price": 15.99,
+        "note": "",
+        "status": "preparing"
+      },
+      {
+        "id": "item-3",
+        "order_id": "order-1",
+        "menu_item_id": "menu-3",
+        "menu_snapshot": {
+          "id": "menu-3",
+          "name": "Caesar Salad",
+          "price": 12.99,
+          "category": "starter"
+        },
+        "quantity": 1,
+        "unit_price": 12.99,
+        "note": "no croutons",
+        "status": "ready"
+      }
+    ]
+  },
+  {
+    "id": "order-2",
+    "table_id": "table-6",
+    "created_by": "user-2",
+    "status": "sent",
+    "subtotal": 58.97,
+    "tax": 5.9,
+    "discount": 5.0,
+    "total": 59.87,
+    "notes": "",
+    "metadata": { "source": "staff" },
+    "created_at": "2024-01-15T19:00:00Z",
+    "updated_at": "2024-01-15T19:05:00Z",
+    "items": [
+      {
+        "id": "item-4",
+        "order_id": "order-2",
+        "menu_item_id": "menu-4",
+        "menu_snapshot": {
+          "id": "menu-4",
+          "name": "Beef Steak",
+          "price": 32.99,
+          "category": "main"
+        },
+        "quantity": 1,
+        "unit_price": 32.99,
+        "note": "well done",
+        "status": "waiting"
+      },
+      {
+        "id": "item-5",
+        "order_id": "order-2",
+        "menu_item_id": "menu-7",
+        "menu_snapshot": {
+          "id": "menu-7",
+          "name": "Pasta Carbonara",
+          "price": 18.99,
+          "category": "main"
+        },
+        "quantity": 1,
+        "unit_price": 18.99,
+        "note": "",
+        "status": "waiting"
+      },
+      {
+        "id": "item-6",
+        "order_id": "order-2",
+        "menu_item_id": "menu-6",
+        "menu_snapshot": {
+          "id": "menu-6",
+          "name": "Orange Juice",
+          "price": 5.99,
+          "category": "drink"
+        },
+        "quantity": 2,
+        "unit_price": 5.99,
+        "note": "",
+        "status": "ready"
+      }
+    ]
+  }
+]
