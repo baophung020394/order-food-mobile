@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# 🍽️ Restaurant Ordering App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a React Native app built with Expo for restaurant staff to manage orders, tables, and menu items.
 
 ## Get started
 
@@ -10,11 +10,31 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Configure API URL (Optional)
+
+   Create a `.env` file in the root directory:
+   ```env
+   EXPO_PUBLIC_API_URL=http://localhost:3000/api/v1
+   ```
+   
+   If not set, the app will default to `http://localhost:3000/api/v1`
+
+3. Start the app
 
    ```bash
    npx expo start
    ```
+
+## Authentication
+
+The app uses JWT authentication. Make sure your backend API Gateway is running at the configured URL.
+
+### Login Endpoint
+- **URL:** `POST /api/v1/auth/login`
+- **Body:** `{ "username": "staff1", "password": "password123" }`
+- **Response:** `{ "user": {...}, "accessToken": "...", "refreshToken": "..." }`
+
+See `docs/brief_api.md` for full API documentation.
 
 In the output, you'll find options to open the app in a
 

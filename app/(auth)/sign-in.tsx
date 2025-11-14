@@ -1,25 +1,24 @@
-import usersData from "@/services/fake-data/users.json";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import { ChefHat } from "lucide-react-native";
 import { useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from 'react-native-toast-message';
 
 const demoAccounts = [
-  { username: "admin", password: "admin123" },
-  { username: "waiter1", password: "waiter123" },
-  { username: "kitchen1", password: "kitchen123" },
-  { username: "cashier1", password: "cashier123" },
+  { username: "admin1", password: "admin123" },
+  { username: "staff1", password: "password123" },
+  { username: "kitchen1", password: "password123" },
 ];
 
 const SignIn = () => {
@@ -27,6 +26,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -37,27 +37,31 @@ const SignIn = () => {
       });
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
-      const user = usersData.find(
-        (u) => u.username === username && u.password_hash === password
-      );
-      if (user && user.is_active) {
-        Toast.show({
-          type: 'success',
-          text1: 'Đăng nhập thành công',
-          text2: `Chào mừng ${user.full_name}!`,
-        });
-        router.push("/(tabs)");
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Đăng nhập thất bại',
-          text2: 'Tên đăng nhập hoặc mật khẩu không đúng',
-        });
-      }
+    try {
+      const response = await login({ username, password });
+      Toast.show({
+        type: 'success',
+        text1: 'Đăng nhập thành công',
+        text2: `Chào mừng ${response.user?.fullName || username}!`,
+      });
+      router.push("/(tabs)");
+    } catch (error: any) {
+      const errorMessage = error?.message || 'Đăng nhập thất bại. Vui lòng thử lại!';
+      Toast.show({
+        type: 'error',
+        text1: 'Đăng nhập thất bại',
+        text2: errorMessage,
+      });
+    } finally {
       setLoading(false);
-    }, 800);
+    }
+  };
+
+  const fillDemoAccount = (account: { username: string; password: string }) => {
+    setUsername(account.username);
+    setPassword(account.password);
   };
 
   return (
@@ -118,20 +122,24 @@ const SignIn = () => {
 
             {/* Demo Accounts */}
             <View className="mt-6 p-4 bg-[#F5F5F5] rounded-lg border border-[#E0E0E0]">
-              <Text className="font-semibold mb-1 text-[#222]">
-                Tài khoản demo:
+              <Text className="font-semibold mb-2 text-[#222]">
+                Tài khoản demo (nhấn để điền):
               </Text>
-              <View className="flex-row flex-wrap justify-between mt-2 gap-y-1">
+              <View className="gap-2">
                 {demoAccounts.map((acc, i) => (
-                  <View
+                  <Pressable
                     key={i}
-                    className="w-[48%] flex-row justify-between pb-0.5"
+                    onPress={() => fillDemoAccount(acc)}
+                    disabled={loading}
+                    className="bg-white rounded-lg p-2 border border-[#E0E0E0]"
                   >
-                    <Text className="text-[#666] text-sm">{acc.username}</Text>
-                    <Text className="text-[#888] text-sm">
-                      / {acc.password}
-                    </Text>
-                  </View>
+                    <View className="flex-row justify-between items-center">
+                      <Text className="text-[#666] text-sm font-medium">{acc.username}</Text>
+                      <Text className="text-[#888] text-xs">
+                        {acc.password}
+                      </Text>
+                    </View>
+                  </Pressable>
                 ))}
               </View>
             </View>

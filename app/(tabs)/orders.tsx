@@ -1,15 +1,15 @@
-import ordersDataRaw from "@/services/fake-data/orders.json";
+import { useOrderContext } from "@/context/OrderContext";
 import tablesData from "@/services/fake-data/tables.json";
 import { useRouter } from "expo-router";
 import { ArrowLeft, CheckCircle, Clock, Search, XCircle } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-    FlatList,
-    Pressable,
-    ScrollView,
-    Text,
-    TextInput,
-    View,
+  FlatList,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -24,20 +24,15 @@ const statusConfig = {
 type OrderStatus = keyof typeof statusConfig;
 
 export default function Orders() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const { orders } = useOrderContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<OrderStatus | "all">("all");
   const router = useRouter();
-
-  useEffect(() => {
-    setOrders(ordersDataRaw);
-  }, []);
 
   const getTableNumber = (tableId: string) => {
     const table = tablesData.find((t) => t.id === tableId);
     return table?.table_number || "N/A";
   };
-
   const filteredOrders = orders.filter((order) => {
     const matchesSearch = getTableNumber(order.table_id).toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
