@@ -1,4 +1,27 @@
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+import { Platform } from 'react-native';
+
+// Helper function để xử lý localhost trên các platform khác nhau
+const getApiBaseUrl = (): string => {
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  
+  // Nếu đã set trong .env thì dùng luôn
+  if (envUrl && !envUrl.includes('localhost')) {
+    return envUrl;
+  }
+  
+  // Xử lý localhost cho các platform
+  let baseUrl = envUrl || 'http://localhost:3000/api/v1';
+  
+  // Android Emulator cần dùng 10.0.2.2 thay vì localhost
+  if (Platform.OS === 'android' && baseUrl.includes('localhost')) {
+    baseUrl = baseUrl.replace('localhost', '10.0.2.2');
+    console.log('🤖 Android Emulator detected - Using 10.0.2.2 instead of localhost');
+  }
+  
+  return baseUrl;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface LoginRequest {
   username: string;
@@ -31,34 +54,90 @@ class AuthService {
 
   constructor() {
     this.baseUrl = API_BASE_URL;
+    // Debug: Log API URL để kiểm tra
+    console.log('🔗 API Base URL:', this.baseUrl);
   }
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/auth/login`, {
+      const loginUrl = `${this.baseUrl}/auth/login`;
+      console.log('📤 Login request to:', loginUrl);
+      console.log('📤 Login credentials:', { username: credentials.username });
+      console.log('📤 Full URL:', loginUrl);
+      
+      const response = await fetch(loginUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
+      console.log('📥 Login response status:', response.status);
+      console.log('📥 Login response headers:', Object.fromEntries(response.headers.entries()));
+      
+      // Kiểm tra content-type trước khi parse JSON
+      const contentType = response.headers.get('content-type');
+      console.log('📥 Response content-type:', contentType);
+      
+      let data;
+      try {
+        const text = await response.text();
+        console.log('📥 Response raw text:', text);
+        data = text ? JSON.parse(text) : {};
+      } catch (parseError) {
+        console.error('❌ JSON parse error:', parseError);
+        throw {
+          message: 'Server trả về dữ liệu không hợp lệ',
+          statusCode: response.status,
+        } as ApiError;
+      }
+      
+      console.log('📥 Login response data:', data);
 
       if (!response.ok) {
+        console.error('❌ Login failed:', data);
         throw {
-          message: data.message || 'Đăng nhập thất bại',
+          message: data.message || data.error || 'Đăng nhập thất bại',
           statusCode: response.status,
         } as ApiError;
       }
 
+      console.log('✅ Login successful');
       return data;
     } catch (error: any) {
-      if (error.statusCode) {
+      console.error('❌ Login error details:', {
+        message: error.message,
+        name: error.name,
+        statusCode: error.statusCode,
+        stack: error.stack,
+      });
+      
+      // Nếu đã có statusCode thì throw luôn (đã xử lý ở trên)
+      if (error.statusCode !== undefined) {
         throw error;
       }
+      
+      // Network error - có thể do không kết nối được đến server
+      const errorMessage = error.message || 'Unknown error';
+      console.error('❌ Network error - Check if API Gateway is running at:', this.baseUrl);
+      console.error('❌ Error type:', error.name);
+      console.error('❌ Error message:', errorMessage);
+      
+      // Kiểm tra các loại lỗi phổ biến
+      if (errorMessage.includes('Network request failed') || 
+          errorMessage.includes('Failed to fetch') ||
+          errorMessage.includes('ECONNREFUSED') ||
+          errorMessage.includes('timeout')) {
+        throw {
+          message: `Không thể kết nối đến server tại ${this.baseUrl}. Vui lòng kiểm tra:\n1. API Gateway có đang chạy không?\n2. URL có đúng không?\n3. Nếu dùng thiết bị thật, đã thay localhost bằng IP chưa?`,
+          statusCode: 0,
+        } as ApiError;
+      }
+      
       throw {
-        message: 'Không thể kết nối đến server. Vui lòng thử lại sau.',
+        message: `Lỗi: ${errorMessage}`,
         statusCode: 0,
       } as ApiError;
     }
