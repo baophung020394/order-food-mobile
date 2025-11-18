@@ -10,14 +10,39 @@ This is a React Native app built with Expo for restaurant staff to manage orders
    npm install
    ```
 
-2. Configure API URL (Optional)
+2. Configure API URL
 
-   Create a `.env` file in the root directory:
-   ```env
-   EXPO_PUBLIC_API_URL=http://localhost:3000/api/v1
+   **⚠️ QUAN TRỌNG:** Nếu chạy Expo trên thiết bị thật, bạn PHẢI thay `localhost` bằng IP của máy dev!
+   
+   **Bước 1:** Lấy IP của máy dev:
+   
+   ```bash
+   # macOS/Linux:
+   ifconfig | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}' | head -1
+   
+   # Windows:
+   ipconfig | findstr IPv4
    ```
    
-   If not set, the app will default to `http://localhost:3000/api/v1`
+   **Bước 2:** Tạo file `.env` trong thư mục root (copy từ `.env.example`):
+   
+   ```bash
+   cp .env.example .env
+   ```
+   
+   **Bước 3:** Chỉnh sửa `.env` với IP của bạn:
+   
+   ```env
+   # Thay 192.168.1.14 bằng IP của máy bạn
+   EXPO_PUBLIC_API_URL=http://192.168.1.14:3000/api/v1
+   ```
+   
+   **Lưu ý:**
+   - ✅ **iOS Simulator**: Có thể dùng `http://localhost:3000/api/v1`
+   - ✅ **Android Emulator**: Code sẽ tự động thay `localhost` → `10.0.2.2`
+   - ⚠️ **Thiết bị thật**: PHẢI dùng IP của máy dev (ví dụ: `http://192.168.1.14:3000/api/v1`)
+   
+   Nếu không set, app sẽ default về `http://192.168.1.14:3000/api/v1` (cần thay bằng IP của bạn)
 
 3. Start the app
 

@@ -1,24 +1,49 @@
 import { Platform } from 'react-native';
 
+// Helper function để đảm bảo URL có protocol
+const ensureProtocol = (url: string): string => {
+  if (!url) return url;
+  // Nếu đã có protocol thì return luôn
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  // Thêm http:// nếu chưa có
+  return `http://${url}`;
+};
+
 // Helper function để xử lý localhost trên các platform khác nhau
 const getApiBaseUrl = (): string => {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   
-  // Nếu đã set trong .env thì dùng luôn
-  if (envUrl && !envUrl.includes('localhost')) {
-    return envUrl;
+  // Nếu đã set trong .env thì dùng luôn (đảm bảo có protocol)
+  if (envUrl) {
+    let baseUrl = ensureProtocol(envUrl);
+    
+    // Android Emulator cần dùng 10.0.2.2 thay vì localhost
+    if (Platform.OS === 'android' && baseUrl.includes('localhost')) {
+      baseUrl = baseUrl.replace('localhost', '10.0.2.2');
+      console.log('🤖 Android Emulator detected - Using 10.0.2.2 instead of localhost');
+    }
+    
+    // iOS Simulator có thể dùng localhost, nhưng thiết bị thật thì không
+    // Nếu đang chạy trên thiết bị thật và dùng localhost, cần thay bằng IP
+    // (Code sẽ giữ nguyên localhost cho iOS Simulator)
+    
+    return baseUrl;
   }
   
-  // Xử lý localhost cho các platform
-  let baseUrl = envUrl || 'http://localhost:3000/api/v1';
+  // Nếu không có .env, dùng default IP của máy dev
+  // Default: dùng IP của máy dev (cần thay bằng IP thực tế của bạn)
+  let baseUrl = '192.168.1.14:3000/api/v1';
   
-  // Android Emulator cần dùng 10.0.2.2 thay vì localhost
-  if (Platform.OS === 'android' && baseUrl.includes('localhost')) {
-    baseUrl = baseUrl.replace('localhost', '10.0.2.2');
-    console.log('🤖 Android Emulator detected - Using 10.0.2.2 instead of localhost');
+  // Android Emulator cần dùng 10.0.2.2
+  if (Platform.OS === 'android') {
+    baseUrl = '10.0.2.2:3000/api/v1';
+    console.log('🤖 Android Emulator detected - Using 10.0.2.2');
   }
   
-  return baseUrl;
+  // Đảm bảo URL có protocol
+  return ensureProtocol(baseUrl);
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -60,7 +85,9 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
+      // Sử dụng this.baseUrl thay vì hardcode
       const loginUrl = `${this.baseUrl}/auth/login`;
+      // const loginUrl = `${this.baseUrl}/auth/login`;
       console.log('📤 Login request to:', loginUrl);
       console.log('📤 Login credentials:', { username: credentials.username });
       console.log('📤 Full URL:', loginUrl);
@@ -241,6 +268,40 @@ class AuthService {
         message: 'Không thể kết nối đến server. Vui lòng thử lại sau.',
         statusCode: 0,
       } as ApiError;
+    }
+  }
+
+  async logout(accessToken: string, refreshToken?: string): Promise<void> {
+    try {
+      const headers: HeadersInit = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      };
+
+      const body = refreshToken ? JSON.stringify({ refreshToken }) : undefined;
+
+      const response = await fetch(`${this.baseUrl}/auth/logout`, {
+        method: 'POST',
+        headers,
+        body,
+      });
+
+      // Nếu logout thành công hoặc token đã hết hạn (401), vẫn coi là thành công
+      if (!response.ok && response.status !== 401) {
+        const data = await response.json().catch(() => ({}));
+        throw {
+          message: data.message || 'Đăng xuất thất bại',
+          statusCode: response.status,
+        } as ApiError;
+      }
+
+      // Logout thành công
+      console.log('✅ Logout successful');
+    } catch (error: any) {
+      // Nếu có lỗi network hoặc server, vẫn tiếp tục logout ở client
+      // (clear local storage) để đảm bảo user có thể logout ngay cả khi server down
+      console.warn('⚠️ Logout API call failed, but continuing with local logout:', error.message);
+      // Không throw error để app vẫn có thể logout ở client side
     }
   }
 }

@@ -75,6 +75,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
+      // Gọi API logout trước khi clear local storage
+      if (accessToken) {
+        try {
+          await authService.logout(accessToken, refreshToken || undefined);
+        } catch (error) {
+          // Nếu API call fail, vẫn tiếp tục logout ở client
+          console.warn('Logout API call failed, continuing with local logout:', error);
+        }
+      }
+
       // Clear stored tokens
       await Promise.all([
         AsyncStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN),
@@ -87,6 +97,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
     } catch (error) {
       console.error('Error logging out:', error);
+      // Đảm bảo state vẫn được clear ngay cả khi có lỗi
+      setAccessToken(null);
+      setRefreshToken(null);
+      setUser(null);
     }
   };
 

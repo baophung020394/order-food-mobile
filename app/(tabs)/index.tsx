@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { useTableContext } from "@/context/TableContext";
 import usersData from "@/services/fake-data/users.json";
 import { useRouter } from "expo-router";
@@ -40,12 +41,19 @@ type Table = {
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const { tables } = useTableContext();
+  const { logout: logoutAuth, user: authUser } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const demoUser = usersData[0];
-    setUser(demoUser);
-  }, []);
+    // Sử dụng user từ AuthContext thay vì fake data
+    if (authUser) {
+      setUser(authUser);
+    } else {
+      // Fallback to demo user nếu chưa có auth user
+      const demoUser = usersData[0];
+      setUser(demoUser);
+    }
+  }, [authUser]);
 
   // Group by location (auto memoized)
   const groupedTables = useMemo(() =>
@@ -56,12 +64,23 @@ export default function Dashboard() {
     }, {}), [tables]
   );
 
-  const handleLogout = () => {
-    Toast.show({
-      type: "success",
-      text1: "Đăng xuất thành công",
-    });
-    router.replace("/(auth)/sign-in");
+  const handleLogout = async () => {
+    try {
+      // Gọi logout từ AuthContext (sẽ gọi API và clear local storage)
+      await logoutAuth();
+      Toast.show({
+        type: "success",
+        text1: "Đăng xuất thành công",
+      });
+      router.replace("/(auth)/sign-in");
+    } catch (error: any) {
+      console.error('Logout error:', error);
+      Toast.show({
+        type: "error",
+        text1: "Đăng xuất thất bại",
+        text2: error?.message || "Vui lòng thử lại",
+      });
+    }
   };
 
   const handleTableClick = (table: Table) => {

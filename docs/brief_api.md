@@ -534,33 +534,6 @@ AuthController
 - **API Gateway:** `http://localhost:3000/api/v1`
 - **Auth Service (Direct):** `http://localhost:3001`
 
-### Common Response Formats
-
-#### Success Responses
-
-- **200 OK**: Request successful
-- **201 Created**: Resource created successfully (e.g., user registration)
-
-#### Error Responses
-
-All error responses follow this format:
-
-```json
-{
-  "statusCode": 400,
-  "message": "Error message or array of validation errors",
-  "error": "Error Type"
-}
-```
-
-**Common HTTP Status Codes:**
-
-- **400 Bad Request**: Validation errors or invalid input
-- **401 Unauthorized**: Missing or invalid authentication token
-- **403 Forbidden**: Insufficient permissions (e.g., non-admin accessing admin endpoint)
-- **409 Conflict**: Resource conflict (e.g., username already exists)
-- **500 Internal Server Error**: Server-side error
-
 ### Authentication Endpoints
 
 All endpoints are accessible through the API Gateway at `/api/v1/auth/*`
@@ -568,8 +541,7 @@ All endpoints are accessible through the API Gateway at `/api/v1/auth/*`
 #### 1. Register User
 
 **Endpoint:** `POST /api/v1/auth/register`  
-**Description:** Create a new user account  
-**Authentication:** Not required
+**Description:** Create a new user account
 
 **Request Body:**
 
@@ -582,13 +554,7 @@ All endpoints are accessible through the API Gateway at `/api/v1/auth/*`
 }
 ```
 
-**Request Validation:**
-- `username`: Required, string, unique
-- `password`: Required, string, minimum length validation
-- `fullName`: Required, string
-- `role`: Optional, enum: "admin" | "staff" | "kitchen", defaults to "staff"
-
-**Success Response (201 Created):**
+**Response:**
 
 ```json
 {
@@ -598,31 +564,11 @@ All endpoints are accessible through the API Gateway at `/api/v1/auth/*`
     "fullName": "John Doe",
     "role": "staff",
     "isActive": true,
-    "createdAt": "2025-01-XXT00:00:00.000Z",
-    "updatedAt": "2025-01-XXT00:00:00.000Z"
+    "createdAt": "2025-01-XX...",
+    "updatedAt": "2025-01-XX..."
   },
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
-}
-```
-
-**Error Responses:**
-
-**400 Bad Request** - Validation error:
-```json
-{
-  "statusCode": 400,
-  "message": ["username should not be empty", "password must be longer than or equal to 6 characters"],
-  "error": "Bad Request"
-}
-```
-
-**409 Conflict** - Username already exists:
-```json
-{
-  "statusCode": 409,
-  "message": "Username already exists",
-  "error": "Conflict"
 }
 ```
 
@@ -644,8 +590,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
 #### 2. Login
 
 **Endpoint:** `POST /api/v1/auth/login`  
-**Description:** Authenticate user and receive JWT tokens  
-**Authentication:** Not required
+**Description:** Authenticate user and receive JWT tokens
 
 **Request Body:**
 
@@ -656,11 +601,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
 }
 ```
 
-**Request Validation:**
-- `username`: Required, string
-- `password`: Required, string
-
-**Success Response (200 OK):**
+**Response:**
 
 ```json
 {
@@ -669,41 +610,10 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
     "username": "staff1",
     "fullName": "John Doe",
     "role": "staff",
-    "isActive": true,
-    "createdAt": "2025-01-XXT00:00:00.000Z",
-    "updatedAt": "2025-01-XXT00:00:00.000Z"
+    "isActive": true
   },
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
-}
-```
-
-**Error Responses:**
-
-**400 Bad Request** - Validation error:
-```json
-{
-  "statusCode": 400,
-  "message": ["username should not be empty", "password should not be empty"],
-  "error": "Bad Request"
-}
-```
-
-**401 Unauthorized** - Invalid credentials:
-```json
-{
-  "statusCode": 401,
-  "message": "Invalid username or password",
-  "error": "Unauthorized"
-}
-```
-
-**403 Forbidden** - Account inactive:
-```json
-{
-  "statusCode": 403,
-  "message": "Account is inactive",
-  "error": "Forbidden"
 }
 ```
 
@@ -723,8 +633,7 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 #### 3. Refresh Token
 
 **Endpoint:** `POST /api/v1/auth/refresh`  
-**Description:** Get new access token using refresh token  
-**Authentication:** Not required (uses refresh token in body)
+**Description:** Get new access token using refresh token
 
 **Request Body:**
 
@@ -734,35 +643,12 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 }
 ```
 
-**Request Validation:**
-- `refreshToken`: Required, string, valid JWT refresh token
-
-**Success Response (200 OK):**
+**Response:**
 
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
-}
-```
-
-**Error Responses:**
-
-**400 Bad Request** - Validation error or invalid token:
-```json
-{
-  "statusCode": 400,
-  "message": "Invalid refresh token",
-  "error": "Bad Request"
-}
-```
-
-**401 Unauthorized** - Token expired or not found:
-```json
-{
-  "statusCode": 401,
-  "message": "Refresh token expired or invalid",
-  "error": "Unauthorized"
 }
 ```
 
@@ -790,7 +676,7 @@ curl -X POST http://localhost:3000/api/v1/auth/refresh \
 Authorization: Bearer <access_token>
 ```
 
-**Success Response (200 OK):**
+**Response:**
 
 ```json
 {
@@ -799,19 +685,8 @@ Authorization: Bearer <access_token>
   "fullName": "John Doe",
   "role": "staff",
   "isActive": true,
-  "createdAt": "2025-01-XXT00:00:00.000Z",
-  "updatedAt": "2025-01-XXT00:00:00.000Z"
-}
-```
-
-**Error Responses:**
-
-**401 Unauthorized** - Missing or invalid token:
-```json
-{
-  "statusCode": 401,
-  "message": "Unauthorized",
-  "error": "Unauthorized"
+  "createdAt": "2025-01-XX...",
+  "updatedAt": "2025-01-XX..."
 }
 ```
 
@@ -824,12 +699,11 @@ curl -X GET http://localhost:3000/api/v1/auth/profile \
 
 ---
 
-#### 5. List All Users (Admin Only)
+#### 5. Logout
 
-**Endpoint:** `GET /api/v1/auth/users`  
-**Description:** Get list of all users (Admin role required)  
-**Authentication:** Required (Bearer Token)  
-**Authorization:** Admin role required
+**Endpoint:** `POST /api/v1/auth/logout`  
+**Description:** Logout user and invalidate refresh token(s)  
+**Authentication:** Required (Bearer Token)
 
 **Headers:**
 
@@ -837,29 +711,28 @@ curl -X GET http://localhost:3000/api/v1/auth/profile \
 Authorization: Bearer <access_token>
 ```
 
+**Request Body (Optional):**
+
+```json
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+**Request Validation:**
+- `refreshToken`: Optional, string, valid JWT refresh token
+
+**Note:**
+
+- If `refreshToken` is provided, only that specific token will be invalidated (logout from one device)
+- If `refreshToken` is not provided, all refresh tokens for the user will be invalidated (logout from all devices)
+
 **Success Response (200 OK):**
 
 ```json
-[
-  {
-    "id": "uuid",
-    "username": "admin1",
-    "fullName": "Admin User",
-    "role": "admin",
-    "isActive": true,
-    "createdAt": "2025-01-XXT00:00:00.000Z",
-    "updatedAt": "2025-01-XXT00:00:00.000Z"
-  },
-  {
-    "id": "uuid",
-    "username": "staff1",
-    "fullName": "John Doe",
-    "role": "staff",
-    "isActive": true,
-    "createdAt": "2025-01-XXT00:00:00.000Z",
-    "updatedAt": "2025-01-XXT00:00:00.000Z"
-  }
-]
+{
+  "message": "Logged out successfully"
+}
 ```
 
 **Error Responses:**
@@ -873,13 +746,69 @@ Authorization: Bearer <access_token>
 }
 ```
 
-**403 Forbidden** - Insufficient permissions (not admin):
+**400 Bad Request** - Invalid refresh token format:
 ```json
 {
-  "statusCode": 403,
-  "message": "Forbidden resource",
-  "error": "Forbidden"
+  "statusCode": 400,
+  "message": "Invalid refresh token",
+  "error": "Bad Request"
 }
+```
+
+**Example:**
+
+```bash
+# Logout from all devices
+curl -X POST http://localhost:3000/api/v1/auth/logout \
+  -H "Authorization: Bearer your-access-token-here"
+
+# Logout from specific device
+curl -X POST http://localhost:3000/api/v1/auth/logout \
+  -H "Authorization: Bearer your-access-token-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "refreshToken": "your-refresh-token-here"
+  }'
+```
+
+---
+
+#### 6. List All Users (Admin Only)
+
+**Endpoint:** `GET /api/v1/auth/users`  
+**Description:** Get list of all users (Admin role required)  
+**Authentication:** Required (Bearer Token)  
+**Authorization:** Admin role required
+
+**Headers:**
+
+```
+Authorization: Bearer <access_token>
+```
+
+**Response:**
+
+```json
+[
+  {
+    "id": "uuid",
+    "username": "admin1",
+    "fullName": "Admin User",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2025-01-XX...",
+    "updatedAt": "2025-01-XX..."
+  },
+  {
+    "id": "uuid",
+    "username": "staff1",
+    "fullName": "John Doe",
+    "role": "staff",
+    "isActive": true,
+    "createdAt": "2025-01-XX...",
+    "updatedAt": "2025-01-XX..."
+  }
+]
 ```
 
 **Example:**

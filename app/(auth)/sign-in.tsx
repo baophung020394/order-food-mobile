@@ -1,9 +1,10 @@
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { ChefHat } from "lucide-react-native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -26,7 +27,33 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+
+  // Prevent back navigation nếu đã đăng nhập
+  useFocusEffect(
+    useCallback(() => {
+      // Nếu đã đăng nhập, redirect về dashboard
+      if (isAuthenticated) {
+        router.replace("/(tabs)");
+        return;
+      }
+
+      // Prevent hardware back button trên Android
+      const onBackPress = () => {
+        if (isAuthenticated) {
+          // Nếu đã đăng nhập, không cho back về login
+          return true; // Return true để prevent default back behavior
+        }
+        return false; // Cho phép back nếu chưa đăng nhập
+      };
+
+      // Android: Handle hardware back button
+      if (Platform.OS === 'android') {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => backHandler.remove();
+      }
+    }, [isAuthenticated, router])
+  );
 
   const handleLogin = async () => {
     if (!username || !password) {
