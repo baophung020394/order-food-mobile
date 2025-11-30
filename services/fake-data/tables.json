@@ -1,0 +1,82 @@
+[
+  {
+    "id": "table-1",
+    "table_number": "A1",
+    "seats": 4,
+    "location": "main hall",
+    "status": "available",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-2",
+    "table_number": "A2",
+    "seats": 2,
+    "location": "main hall",
+    "status": "occupied",
+    "current_order_id": "order-1",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-3",
+    "table_number": "A3",
+    "seats": 6,
+    "location": "main hall",
+    "status": "reserved",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-4",
+    "table_number": "A4",
+    "seats": 4,
+    "location": "main hall",
+    "status": "dirty",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-5",
+    "table_number": "B1",
+    "seats": 2,
+    "location": "patio",
+    "status": "available",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-6",
+    "table_number": "B2",
+    "seats": 4,
+    "location": "patio",
+    "status": "occupied",
+    "current_order_id": "order-2",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-7",
+    "table_number": "B3",
+    "seats": 8,
+    "location": "patio",
+    "status": "available",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "table-8",
+    "table_number": "C1",
+    "seats": 4,
+    "location": "terrace",
+    "status": "available",
+    "current_order_id": null,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]

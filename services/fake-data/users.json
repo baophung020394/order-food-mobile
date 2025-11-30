@@ -1,0 +1,46 @@
+[
+  {
+    "id": "user-1",
+    "username": "admin",
+    "password_hash": "admin123",
+    "full_name": "Admin User",
+    "email": "admin@restaurant.com",
+    "role": "admin",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "user-2",
+    "username": "waiter1",
+    "password_hash": "waiter123",
+    "full_name": "John Waiter",
+    "email": "john@restaurant.com",
+    "role": "waiter",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "user-3",
+    "username": "kitchen1",
+    "password_hash": "kitchen123",
+    "full_name": "Maria Chef",
+    "email": "maria@restaurant.com",
+    "role": "kitchen",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "user-4",
+    "username": "cashier1",
+    "password_hash": "cashier123",
+    "full_name": "Tom Cashier",
+    "email": "tom@restaurant.com",
+    "role": "cashier",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]
