@@ -53,50 +53,99 @@ export default function Orders() {
     });
   };
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: '#E8E8E8' }}>
       {/* Header */}
-      <View className="bg-white border-b shadow-sm px-4 py-4 flex-row items-center gap-3">
+      <View 
+        className="px-6 py-5 flex-row items-center gap-4 rounded-b-3xl"
+        style={{ 
+          backgroundColor: '#EEEEEE',
+          ...neumorphicOutset,
+        }}
+      >
         <Pressable
-          className="rounded-full bg-gray-100 p-1 mr-2"
+          className="rounded-2xl p-2"
+          style={{ 
+            backgroundColor: '#EEEEEE',
+            ...neumorphicInset,
+          }}
           onPress={() => router.back()}
         >
-          <ArrowLeft size={22} color="#222" />
+          <ArrowLeft size={20} color="#64748B" />
         </Pressable>
-        <Text className="text-xl font-bold">Danh sách đơn hàng</Text>
+        <Text className="text-2xl font-bold" style={{ color: '#64748B' }}>Đơn hàng</Text>
       </View>
       {/* Search & Filter */}
-      <View className="px-4 py-3 bg-[#F8F8F8]">
-        <View className="relative mb-2">
+      <View className="px-4 py-5">
+        <View className="relative mb-4">
           <Search
             size={18}
-            color="#999"
-            style={{ position: "absolute", left: 14, top: 13 }}
+            color="#94A3B8"
+            style={{ position: "absolute", left: 16, top: 14, zIndex: 1 }}
           />
           <TextInput
-            className="h-11 bg-white pl-10 pr-3 rounded-lg border border-[#E0E0E0] text-[15px]"
+            className="h-12 pl-12 pr-4 rounded-3xl text-base"
+            style={{ 
+              backgroundColor: '#EEEEEE',
+              color: '#64748B',
+              ...neumorphicInset,
+            }}
             placeholder="Tìm theo số bàn..."
-            placeholderTextColor="#aaa"
+            placeholderTextColor="#94A3B8"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2 mt-2 pb-1">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 mt-2 pb-1">
           <Pressable
             onPress={() => setFilterStatus("all")}
-            className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === "all" ? "bg-[#4CAF50] border-[#4CAF50]" : "bg-white border-[#E0E0E0]"}`}
+            className={`px-5 py-2.5 rounded-3xl`}
+            style={{
+              backgroundColor: filterStatus === "all" ? '#B8D4E3' : '#EEEEEE',
+              ...(filterStatus === "all" ? neumorphicInset : neumorphicOutset),
+            }}
           >
-            <Text className={`font-semibold ${filterStatus === "all" ? "text-white" : "text-[#333]"}`}>Tất cả</Text>
+            <Text className="font-semibold text-sm" style={{ color: filterStatus === "all" ? '#64748B' : '#94A3B8' }}>Tất cả</Text>
           </Pressable>
-          {Object.entries(statusConfig).map(([status, config]) => (
-            <Pressable
-              key={status}
-              onPress={() => setFilterStatus(status as OrderStatus)}
-              className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === status ? `bg-[${config.bg}] border-[${config.bg}]` : "bg-white border-[#E0E0E0]"}`}
-            >
-              <Text className={`font-semibold ${filterStatus === status ? "text-white" : "text-[#333]"}`}>{config.label}</Text>
-            </Pressable>
-          ))}
+          {Object.entries(statusConfig).map(([status, config]) => {
+            const pastelColors: Record<string, string> = {
+              draft: '#D4C5E8',
+              sent: '#B8D4E3',
+              in_kitchen: '#F4D1AE',
+              served: '#C4E4D4',
+              completed: '#C4E4D4',
+              cancelled: '#F2C2D1',
+            };
+            const isActive = filterStatus === status;
+            return (
+              <Pressable
+                key={status}
+                onPress={() => setFilterStatus(status as OrderStatus)}
+                className="px-5 py-2.5 rounded-3xl"
+                style={{
+                  backgroundColor: isActive ? pastelColors[status] || '#EEEEEE' : '#EEEEEE',
+                  ...(isActive ? neumorphicInset : neumorphicOutset),
+                }}
+              >
+                <Text className="font-semibold text-sm" style={{ color: isActive ? '#64748B' : '#94A3B8' }}>{config.label}</Text>
+              </Pressable>
+            );
+          })}
         </ScrollView>
       </View>
       {/* Orders List */}
@@ -106,35 +155,57 @@ export default function Orders() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 32 }}
         ListEmptyComponent={
-          <View className="py-16 w-full justify-center items-center">
-            <Text className="text-gray-400">Không tìm thấy đơn hàng nào</Text>
+          <View className="py-20 w-full justify-center items-center">
+            <Text className="text-base" style={{ color: '#94A3B8' }}>Không tìm thấy đơn hàng</Text>
           </View>
         }
         renderItem={({ item: order }) => {
           const config = statusConfig[order.status as OrderStatus];
           const StatusIcon = config.icon;
+          const pastelColors: Record<string, string> = {
+            draft: '#D4C5E8',
+            sent: '#B8D4E3',
+            in_kitchen: '#F4D1AE',
+            served: '#C4E4D4',
+            completed: '#C4E4D4',
+            cancelled: '#F2C2D1',
+          };
           return (
             <Pressable
               key={order.id}
-              className="bg-white mb-3 rounded-xl p-4 shadow-sm border border-[#F1F1F1]"
+              className="mb-4 rounded-3xl p-5"
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicOutset,
+              }}
               onPress={() => router.push(`/table/${order.table_id}`)}
             >
               <View className="flex-row items-start justify-between gap-4">
                 <View className="flex-1">
-                  <View className="flex-row items-center gap-2 mb-1">
-                    <Text className="text-lg font-bold">Bàn {getTableNumber(order.table_id)}</Text>
-                    <View style={{ backgroundColor: config.bg, flexDirection: 'row', alignItems: 'center', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2, marginLeft: 3 }}>
-                      <StatusIcon size={13} color="#fff" style={{ marginRight: 2 }} />
-                      <Text style={{ color: "#fff", fontSize: 12, fontWeight: "bold" }}>{config.label}</Text>
+                  <View className="flex-row items-center gap-3 mb-2">
+                    <Text className="text-xl font-bold" style={{ color: '#64748B' }}>Bàn {getTableNumber(order.table_id)}</Text>
+                    <View 
+                      style={{ 
+                        backgroundColor: pastelColors[order.status] || '#EEEEEE',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        borderRadius: 16,
+                        paddingHorizontal: 10,
+                        paddingVertical: 4,
+                        ...neumorphicInset,
+                      }}
+                    >
+                      <StatusIcon size={12} color="#64748B" style={{ marginRight: 4 }} />
+                      <Text style={{ color: "#64748B", fontSize: 11, fontWeight: "bold" }}>{config.label}</Text>
                     </View>
                   </View>
-                  <Text className="text-sm text-gray-400 mb-1">{formatDate(order.created_at)}</Text>
+                  <Text className="text-sm mb-2" style={{ color: '#94A3B8' }}>{formatDate(order.created_at)}</Text>
                   {order.notes ? (
-                    <Text className="text-xs text-[#FF9800] italic">Ghi chú: {order.notes}</Text>
+                    <Text className="text-xs italic" style={{ color: '#94A3B8' }}>Ghi chú: {order.notes}</Text>
                   ) : null}
                 </View>
                 <View className="items-end justify-end min-w-[95px]">
-                  <Text className="text-lg font-bold text-[#388E3C]">{formatCurrency(order.total)}</Text>
+                  <Text className="text-xl font-bold" style={{ color: '#64748B' }}>{formatCurrency(order.total)}</Text>
                 </View>
               </View>
             </Pressable>

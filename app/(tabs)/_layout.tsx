@@ -4,8 +4,8 @@ import { Text, View } from "react-native";
 
 const TabIcon = ({ focused, iconName, title }: any) => {
   const iconProps = {
-    size: focused ? 27 : 21,
-    color: focused ? "#fff" : "#bbb",
+    size: focused ? 24 : 20,
+    color: focused ? "#64748B" : "#94A3B8",
   };
   const Icon =
     iconName === "Table"
@@ -16,11 +16,32 @@ const TabIcon = ({ focused, iconName, title }: any) => {
       ? User
       : null;
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
-    <View className="flex flex-row items-center justify-center w-56">
+    <View 
+      className="flex flex-row items-center justify-center px-4 py-2 rounded-3xl"
+      style={{
+        backgroundColor: '#EEEEEE',
+        ...(focused ? neumorphicInset : neumorphicOutset),
+      }}
+    >
       {Icon ? <Icon {...iconProps} /> : null}
       {focused && (
-        <Text className="text-white text-base font-semibold ml-2">{title}</Text>
+        <Text className="text-sm font-semibold ml-2" style={{ color: '#64748B' }}>{title}</Text>
       )}
     </View>
   );
@@ -32,18 +53,19 @@ const _Layout = () => {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#181828",
+          backgroundColor: "#EEEEEE",
           borderRadius: 30,
           marginHorizontal: 14,
-          marginBottom: 16, // Giảm để lên cao giữa sát vùng safe
-          height: 66, // cao hơn mặc định
-          paddingTop: 8, // ĐỦ rộng, icon + label ở giữa hoàn hảo
+          marginBottom: 16,
+          height: 70,
+          paddingTop: 8,
           paddingBottom: 10,
           position: "absolute",
-          shadowColor: "#0e152b",
-          shadowOpacity: 0.16,
-          shadowRadius: 10,
-          elevation: 10,
+          shadowColor: "#D1D1D1",
+          shadowOffset: { width: 0, height: -8 },
+          shadowOpacity: 0.8,
+          shadowRadius: 16,
+          elevation: 8,
           borderTopWidth: 0,
         },
         tabBarItemStyle: {

@@ -91,42 +91,81 @@ const SignIn = () => {
     setPassword(account.password);
   };
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
-    <SafeAreaView className="flex-1 h-full w-full">
-      <ScrollView className="flex-1 bg-gradient-to-br from-[#388E3C]/10 via-[#fff] to-[#E0E0E0]/10 p-4">
+    <SafeAreaView className="flex-1 h-full w-full" style={{ backgroundColor: '#E8E8E8' }}>
+      <ScrollView className="flex-1 p-6">
         <KeyboardAvoidingView
           className="flex-1 justify-center items-center"
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6">
-            <View className="items-center mb-6">
-              <View className="bg-[#388E3C] w-16 h-16 rounded-full items-center justify-center mb-2">
-                <ChefHat color="#fff" size={32} />
+          <View 
+            className="w-full max-w-md mx-auto rounded-3xl p-8"
+            style={{
+              backgroundColor: '#EEEEEE',
+              ...neumorphicOutset,
+            }}
+          >
+            <View className="items-center mb-8">
+              <View 
+                className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  ...neumorphicInset,
+                }}
+              >
+                <ChefHat color="#94A3B8" size={36} />
               </View>
-              <Text className="text-3xl font-bold mb-1 text-center">
+              <Text className="text-3xl font-bold mb-2 text-center" style={{ color: '#64748B' }}>
                 Restaurant POS
               </Text>
-              <Text className="text-base text-gray-600 text-center mb-2">
+              <Text className="text-sm text-center" style={{ color: '#94A3B8' }}>
                 Đăng nhập vào hệ thống quản lý nhà hàng
               </Text>
             </View>
 
             {/* Form */}
-            <View className="mb-4">
-              <Text className="font-medium mb-1">Tên đăng nhập</Text>
+            <View className="mb-6">
+              <Text className="font-semibold mb-2 text-sm" style={{ color: '#64748B' }}>Tên đăng nhập</Text>
               <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 mb-2 text-base"
+                className="rounded-3xl px-4 h-12 mb-4 text-base"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  color: '#64748B',
+                  ...neumorphicInset,
+                }}
                 placeholder="Nhập tên đăng nhập"
+                placeholderTextColor="#94A3B8"
                 value={username}
                 onChangeText={setUsername}
                 editable={!loading}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              <Text className="font-medium mb-1">Mật khẩu</Text>
+              <Text className="font-semibold mb-2 text-sm" style={{ color: '#64748B' }}>Mật khẩu</Text>
               <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 text-base"
+                className="rounded-3xl px-4 h-12 text-base"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  color: '#64748B',
+                  ...neumorphicInset,
+                }}
                 placeholder="Nhập mật khẩu"
+                placeholderTextColor="#94A3B8"
                 value={password}
                 onChangeText={setPassword}
                 editable={!loading}
@@ -134,35 +173,49 @@ const SignIn = () => {
               />
             </View>
             <Pressable
-              className={`w-full rounded-xl bg-[#388E3C] h-12 flex-row items-center justify-center mt-2 ${loading ? "opacity-60" : ""}`}
+              className={`w-full rounded-3xl h-12 flex-row items-center justify-center ${loading ? "opacity-60" : ""}`}
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicOutset,
+              }}
               onPress={handleLogin}
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color="#64748B" />
               ) : (
-                <Text className="text-white font-semibold text-base">
+                <Text className="font-semibold text-base" style={{ color: '#64748B' }}>
                   Đăng nhập
                 </Text>
               )}
             </Pressable>
 
             {/* Demo Accounts */}
-            <View className="mt-6 p-4 bg-[#F5F5F5] rounded-lg border border-[#E0E0E0]">
-              <Text className="font-semibold mb-2 text-[#222]">
+            <View 
+              className="mt-8 p-5 rounded-3xl"
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicInset,
+              }}
+            >
+              <Text className="font-semibold mb-4 text-sm" style={{ color: '#64748B' }}>
                 Tài khoản demo (nhấn để điền):
               </Text>
-              <View className="gap-2">
+              <View className="gap-3">
                 {demoAccounts.map((acc, i) => (
                   <Pressable
                     key={i}
                     onPress={() => fillDemoAccount(acc)}
                     disabled={loading}
-                    className="bg-white rounded-lg p-2 border border-[#E0E0E0]"
+                    className="rounded-2xl p-3"
+                    style={{
+                      backgroundColor: '#EEEEEE',
+                      ...neumorphicOutset,
+                    }}
                   >
                     <View className="flex-row justify-between items-center">
-                      <Text className="text-[#666] text-sm font-medium">{acc.username}</Text>
-                      <Text className="text-[#888] text-xs">
+                      <Text className="text-sm font-semibold" style={{ color: '#64748B' }}>{acc.username}</Text>
+                      <Text className="text-xs" style={{ color: '#94A3B8' }}>
                         {acc.password}
                       </Text>
                     </View>

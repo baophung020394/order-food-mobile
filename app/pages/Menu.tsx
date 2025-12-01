@@ -114,81 +114,122 @@ const MenuScreen = () => {
     }
   };
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: '#E8E8E8' }}>
       <View className="flex-1">
         {/* Header */}
-        <View className="border-b bg-white px-4 py-4 flex-row items-center justify-between shadow-sm">
-          <View className="flex-row items-center gap-3">
+        <View 
+          className="px-6 py-5 flex-row items-center justify-between rounded-b-3xl"
+          style={{
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
+        >
+          <View className="flex-row items-center gap-4">
             <TouchableOpacity
-              className="rounded-full bg-gray-100 mr-2 p-2"
+              className="rounded-2xl p-2"
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicInset,
+              }}
               onPress={() => router.back()}
             >
-              <ArrowLeft size={22} color="#222" />
+              <ArrowLeft size={20} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-xl font-bold text-[#18181b]">
-              Quản lý thực đơn
+            <Text className="text-2xl font-bold" style={{ color: '#64748B' }}>
+              Thực đơn
             </Text>
           </View>
           <TouchableOpacity
-            className="bg-green-700 flex-row items-center rounded-lg px-3 py-2"
+            className="flex-row items-center rounded-2xl px-4 py-2.5"
+            style={{
+              backgroundColor: '#EEEEEE',
+              ...neumorphicOutset,
+            }}
             onPress={handleAdd}
           >
-            <Plus size={17} color="#fff" className="mr-2" />
-            <Text className="text-white font-semibold ml-1">Thêm món</Text>
+            <Plus size={18} color="#64748B" className="mr-2" />
+            <Text className="font-semibold text-sm" style={{ color: '#64748B' }}>Thêm</Text>
           </TouchableOpacity>
         </View>
         <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
           {/* Search & Filter */}
-          <View className="px-4 py-4">
-            <View className="relative mb-3">
-              <View className="absolute top-0 bottom-0 left-3 justify-center flex-col h-full z-10">
-                <Search size={20} color="#aaa" />
+          <View className="px-4 py-5">
+            <View className="relative mb-4">
+              <View className="absolute top-0 bottom-0 left-4 justify-center flex-col h-full z-10">
+                <Search size={18} color="#94A3B8" />
               </View>
               <TextInput
-                className="bg-white rounded-lg pl-10 pr-3 h-12 text-base text-[#222]"
+                className="pl-12 pr-4 rounded-3xl h-12 text-base"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  color: '#64748B',
+                  ...neumorphicInset,
+                }}
                 placeholder="Tìm món ăn..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholderTextColor="#888"
+                placeholderTextColor="#94A3B8"
               />
             </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2 pb-2">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 pb-2">
               <TouchableOpacity
-                className={`px-4 py-1.5 rounded-full border mr-2 ${
-                  filterCategory === "all"
-                    ? "bg-green-700 border-green-700"
-                    : "bg-white border-[#eee]"
-                }`}
+                className="px-5 py-2.5 rounded-3xl"
+                style={{
+                  backgroundColor: filterCategory === "all" ? '#B8D4E3' : '#EEEEEE',
+                  ...(filterCategory === "all" ? neumorphicInset : neumorphicOutset),
+                }}
                 onPress={() => setFilterCategory("all")}
               >
                 <Text
-                  className={`text-base font-semibold ${
-                    filterCategory === "all" ? "text-white" : "text-[#222]"
-                  }`}
+                  className="text-sm font-semibold"
+                  style={{ color: filterCategory === "all" ? '#64748B' : '#94A3B8' }}
                 >
                   Tất cả
                 </Text>
               </TouchableOpacity>
-              {categories.map((category) => (
-                <TouchableOpacity
-                  key={category}
-                  className={`px-4 py-1.5 rounded-full border mr-2 ${
-                    filterCategory === category
-                      ? "bg-green-700 border-green-700"
-                      : "bg-white border-[#eee]"
-                  }`}
-                  onPress={() => setFilterCategory(category)}
-                >
-                  <Text
-                    className={`text-base font-semibold ${
-                      filterCategory === category ? "text-white" : "text-[#222]"
-                    }`}
+              {categories.map((category) => {
+                const pastelColors: Record<string, string> = {
+                  main: '#F4D1AE',
+                  starter: '#C4E4D4',
+                  drink: '#B8D4E3',
+                  dessert: '#F2C2D1',
+                };
+                const isActive = filterCategory === category;
+                return (
+                  <TouchableOpacity
+                    key={category}
+                    className="px-5 py-2.5 rounded-3xl"
+                    style={{
+                      backgroundColor: isActive ? pastelColors[category] || '#EEEEEE' : '#EEEEEE',
+                      ...(isActive ? neumorphicInset : neumorphicOutset),
+                    }}
+                    onPress={() => setFilterCategory(category)}
                   >
-                    {getCategoryLabel(category)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: isActive ? '#64748B' : '#94A3B8' }}
+                    >
+                      {getCategoryLabel(category)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </ScrollView>
           </View>
           {/* Menu Items Grid */}
@@ -206,60 +247,91 @@ const MenuScreen = () => {
                     key={item.id}
                     className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4"
                   >
-                    <View className="overflow-hidden rounded-2xl bg-white shadow-sm">
-                      <View className="aspect-[4/3] bg-gray-100 relative w-full items-center justify-center">
+                    <View 
+                      className="rounded-3xl overflow-hidden"
+                      style={{
+                        backgroundColor: '#EEEEEE',
+                        ...neumorphicOutset,
+                      }}
+                    >
+                      <View className="aspect-[4/3] relative w-full items-center justify-center" style={{ backgroundColor: '#EEEEEE' }}>
                         <Image
                           source={{ uri: item.image_url || defaultImg }}
-                          className="w-full h-full rounded-t-xl"
+                          className="w-full h-full"
                           resizeMode="cover"
                           onError={() => { item.image_url = defaultImg; }}
                         />
                         {!item.is_available && (
-                          <View className="absolute inset-0 bg-black/50 items-center justify-center z-10">
-                            <Text className="bg-red-500 text-white font-bold px-2 py-1 rounded-full">
-                              Hết hàng
-                            </Text>
+                          <View className="absolute inset-0 bg-black/40 items-center justify-center z-10">
+                            <View 
+                              className="px-3 py-1.5 rounded-2xl"
+                              style={{
+                                backgroundColor: '#F2C2D1',
+                                ...neumorphicInset,
+                              }}
+                            >
+                              <Text className="font-bold text-xs" style={{ color: '#64748B' }}>
+                                Hết hàng
+                              </Text>
+                            </View>
                           </View>
                         )}
                       </View>
-                      <View className="p-4 space-y-3">
-                        <View className="flex-row items-start justify-between gap-2 mb-1">
-                          <Text className="font-semibold text-lg flex-1" numberOfLines={1}>
+                      <View className="p-5 space-y-3">
+                        <View className="flex-row items-start justify-between gap-2 mb-2">
+                          <Text className="font-bold text-lg flex-1" style={{ color: '#64748B' }} numberOfLines={1}>
                             {item.name}
                           </Text>
-                          <View className={`px-3 py-1 rounded-full ${categoryColors[item.category]} ml-2`}>
-                            <Text className="text-xs text-white font-bold" numberOfLines={1}>
+                          <View 
+                            className="px-3 py-1 rounded-2xl ml-2"
+                            style={{
+                              backgroundColor: categoryColors[item.category] === 'bg-orange-500' ? '#F4D1AE' :
+                                             categoryColors[item.category] === 'bg-green-500' ? '#C4E4D4' :
+                                             categoryColors[item.category] === 'bg-blue-500' ? '#B8D4E3' :
+                                             categoryColors[item.category] === 'bg-pink-500' ? '#F2C2D1' : '#D4C5E8',
+                              ...neumorphicInset,
+                            }}
+                          >
+                            <Text className="text-xs font-bold" style={{ color: '#64748B' }} numberOfLines={1}>
                               {getCategoryLabel(item.category)}
                             </Text>
                           </View>
                         </View>
-                        <Text className="text-sm text-gray-500" numberOfLines={2}>
+                        <Text className="text-sm leading-relaxed" style={{ color: '#94A3B8' }} numberOfLines={2}>
                           {item.description}
                         </Text>
-                        <View className="flex-row items-center justify-between mt-1">
-                          <Text className="text-lg font-bold text-green-700">
+                        <View className="flex-row items-center justify-between mt-2 border-t pt-3" style={{ borderTopColor: '#D1D1D1' }}>
+                          <Text className="text-xl font-bold" style={{ color: '#64748B' }}>
                             {formatCurrency(item.price)}
                           </Text>
-                          <Text className="text-sm text-gray-400">
+                          <Text className="text-xs" style={{ color: '#94A3B8' }}>
                             {item.prep_time_minutes} phút
                           </Text>
                         </View>
-                        <View className="flex-row gap-2 mt-3">
+                        <View className="flex-row gap-2 mt-4">
                           <TouchableOpacity
-                            className="flex-1 border border-gray-300 bg-white rounded-lg flex-row items-center justify-center py-2 mr-2"
+                            className="flex-1 rounded-2xl flex-row items-center justify-center py-2.5"
+                            style={{
+                              backgroundColor: '#EEEEEE',
+                              ...neumorphicOutset,
+                            }}
                             onPress={() => handleEdit(item)}
                           >
-                            <Edit size={18} color="#38a169" className="mr-1" />
-                            <Text className="text-green-700 font-bold ml-1">
+                            <Edit size={16} color="#64748B" className="mr-2" />
+                            <Text className="font-semibold text-xs" style={{ color: '#64748B' }}>
                               Sửa
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
-                            className="flex-1 border border-gray-300 bg-white rounded-lg flex-row items-center justify-center py-2"
+                            className="flex-1 rounded-2xl flex-row items-center justify-center py-2.5"
+                            style={{
+                              backgroundColor: '#EEEEEE',
+                              ...neumorphicOutset,
+                            }}
                             onPress={() => setDeleteId(item.id)}
                           >
-                            <Trash2 size={18} color="#ef4444" className="mr-1" />
-                            <Text className="text-red-500 font-bold ml-1">Xóa</Text>
+                            <Trash2 size={16} color="#64748B" className="mr-2" />
+                            <Text className="font-semibold text-xs" style={{ color: '#64748B' }}>Xóa</Text>
                           </TouchableOpacity>
                         </View>
                       </View>

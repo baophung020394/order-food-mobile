@@ -141,104 +141,206 @@ export default function TableDetail() {
     }
   };
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   if (!table) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg">Không tìm thấy bàn</Text>
+      <SafeAreaView className="flex-1 justify-center items-center" style={{ backgroundColor: '#E8E8E8' }}>
+        <Text className="text-base" style={{ color: '#94A3B8' }}>Không tìm thấy bàn</Text>
       </SafeAreaView>
     );
   }
   if (order && order.status === "completed") {
     setTimeout(() => router.back(), 300);
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg text-green-600">Đơn hàng đã hoàn thành</Text>
+      <SafeAreaView className="flex-1 justify-center items-center" style={{ backgroundColor: '#E8E8E8' }}>
+        <Text className="text-base" style={{ color: '#64748B' }}>Đơn hàng đã hoàn thành</Text>
       </SafeAreaView>
     );
   }
   const tableStatus = (table.status as TableStatus) || "available";
+  const pastelColors: Record<string, string> = {
+    available: '#C4E4D4',
+    occupied: '#F4D1AE',
+    reserved: '#B8D4E3',
+    dirty: '#F2C2D1',
+  };
   return (
-    <SafeAreaView className="flex-1 bg-zinc-50 pb-10">
+    <SafeAreaView className="flex-1 pb-10" style={{ backgroundColor: '#E8E8E8' }}>
       {/* Header */}
-      <View className="flex-row items-center gap-3 border-b bg-white shadow pb-3 pt-5 px-4 z-10">
-        <Pressable onPress={() => router.back()} className="p-2 mr-2 rounded-full bg-gray-100">
-          <ArrowLeft size={22} color="#333" />
+      <View 
+        className="flex-row items-center gap-4 rounded-b-3xl pb-4 pt-5 px-6 z-10"
+        style={{
+          backgroundColor: '#EEEEEE',
+          ...neumorphicOutset,
+        }}
+      >
+        <Pressable 
+          onPress={() => router.back()} 
+          className="p-2 rounded-2xl"
+          style={{
+            backgroundColor: '#EEEEEE',
+            ...neumorphicInset,
+          }}
+        >
+          <ArrowLeft size={20} color="#64748B" />
         </Pressable>
         <View className="flex-1">
-          <Text className="text-xl font-bold text-zinc-900">Bàn {table.table_number}</Text>
-          <Text className="text-sm text-gray-400">{table.seats} chỗ ngồi - {table.location}</Text>
+          <Text className="text-2xl font-bold" style={{ color: '#64748B' }}>Bàn {table.table_number}</Text>
+          <Text className="text-sm mt-0.5" style={{ color: '#94A3B8' }}>{table.seats} chỗ - {table.location}</Text>
         </View>
-        <View className={`rounded-lg px-4 py-1.5 ${statusConfig[tableStatus].className} min-w-[70px] items-center`}>
-          <Text className="text-white text-[13px] font-semibold capitalize">{statusConfig[tableStatus].label}</Text>
+        <View 
+          className="px-4 py-2 rounded-2xl min-w-[80px] items-center"
+          style={{
+            backgroundColor: pastelColors[tableStatus] || '#D4C5E8',
+            ...neumorphicInset,
+          }}
+        >
+          <Text className="text-xs font-semibold" style={{ color: '#64748B' }}>{statusConfig[tableStatus].label}</Text>
         </View>
       </View>
       {/* Main Content */}
-      <ScrollView className="flex-1 px-4 pt-5 pb-24">
+      <ScrollView className="flex-1 px-4 pt-6 pb-24">
         {!order ? (
-          <View className="bg-white rounded-xl p-8 shadow-sm items-center mt-10">
-            <Text className="text-gray-400 mb-4">Chưa có đơn hàng</Text>
-            <TouchableOpacity className="flex-row items-center bg-green-700 px-5 py-3 rounded-xl" onPress={handleCreateOrder}>
-              <Plus size={18} color="#fff" className="mr-2" />
-              <Text className="text-white font-semibold text-base ml-2">Tạo đơn hàng mới</Text>
+          <View 
+            className="rounded-3xl p-10 items-center mt-10"
+            style={{
+              backgroundColor: '#EEEEEE',
+              ...neumorphicOutset,
+            }}
+          >
+            <Text className="mb-6" style={{ color: '#94A3B8' }}>Chưa có đơn hàng</Text>
+            <TouchableOpacity 
+              className="flex-row items-center px-6 py-3.5 rounded-3xl" 
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicOutset,
+              }}
+              onPress={handleCreateOrder}
+            >
+              <Plus size={18} color="#64748B" className="mr-2" />
+              <Text className="font-semibold text-sm ml-2" style={{ color: '#64748B' }}>Tạo đơn hàng mới</Text>
             </TouchableOpacity>
           </View>
         ) : (
           <View>
             {/* Order Info */}
-            <View className="bg-white rounded-2xl shadow p-4 mb-6">
-              <View className="flex-row items-center justify-between mb-3">
-                <Text className="font-bold text-base">Đơn hàng #{String(order.id).slice(-6)}</Text>
-                <View className="rounded-full border border-blue-500 px-3 py-0.5 bg-white">
-                  <Text className="text-blue-500 text-sm font-semibold">{order.status}</Text>
+            <View 
+              className="rounded-3xl p-6 mb-6"
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicOutset,
+              }}
+            >
+              <View className="flex-row items-center justify-between mb-4">
+                <Text className="font-bold text-xl" style={{ color: '#64748B' }}>Đơn hàng #{String(order.id).slice(-6)}</Text>
+                <View 
+                  className="px-4 py-1.5 rounded-2xl"
+                  style={{
+                    backgroundColor: '#EEEEEE',
+                    ...neumorphicInset,
+                  }}
+                >
+                  <Text className="text-xs font-semibold" style={{ color: '#64748B' }}>{order.status}</Text>
                 </View>
               </View>
               {!!order.notes && (
-                <View className="bg-blue-50 rounded-lg p-2 mb-3">
-                  <Text className="text-sm"><Text className="font-semibold">Ghi chú:</Text> {order.notes}</Text>
+                <View 
+                  className="rounded-2xl p-3 mb-4"
+                  style={{
+                    backgroundColor: '#EEEEEE',
+                    ...neumorphicInset,
+                  }}
+                >
+                  <Text className="text-sm" style={{ color: '#64748B' }}>
+                    <Text className="font-semibold">Ghi chú:</Text> {order.notes}
+                  </Text>
                 </View>
               )}
               {order.items?.map((item: any) => {
                 const itemStatus = (item.status as ItemStatus) || 'waiting';
+                const itemPastelColors: Record<string, string> = {
+                  waiting: '#F4D1AE',
+                  preparing: '#F4D1AE',
+                  ready: '#C4E4D4',
+                  served: '#C4E4D4',
+                  sent: '#B8D4E3',
+                };
                 return (
-                  <View key={item.id} className="border rounded-xl p-4 mb-3 bg-gray-50">
-                    <View className="flex-row justify-between items-start gap-2 mb-2">
+                  <View 
+                    key={item.id} 
+                    className="rounded-3xl p-4 mb-3"
+                    style={{
+                      backgroundColor: '#EEEEEE',
+                      ...neumorphicInset,
+                    }}
+                  >
+                    <View className="flex-row justify-between items-start gap-3 mb-3">
                       <View className="flex-1">
-                        <Text className="font-semibold text-base">{item.menu_snapshot.name}</Text>
-                        <Text className="text-xs text-gray-500 mt-1">SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
-                        {!!item.note && <Text className="text-xs text-orange-500 mt-1">Ghi chú: {item.note}</Text>}
+                        <Text className="font-bold text-lg" style={{ color: '#64748B' }}>{item.menu_snapshot.name}</Text>
+                        <Text className="text-xs mt-1" style={{ color: '#94A3B8' }}>SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
+                        {!!item.note && (
+                          <Text className="text-xs mt-1" style={{ color: '#94A3B8' }}>Ghi chú: {item.note}</Text>
+                        )}
                       </View>
-                      <View className={`rounded-lg px-2 py-1 items-center min-w-[60px] ${itemStatusConfig[itemStatus].className}`}>
-                        <Text className="text-white text-xs">{itemStatusConfig[itemStatus].label}</Text>
+                      <View 
+                        className="px-3 py-1.5 rounded-2xl items-center min-w-[70px]"
+                        style={{
+                          backgroundColor: itemPastelColors[itemStatus] || '#D4C5E8',
+                          ...neumorphicInset,
+                        }}
+                      >
+                        <Text className="text-xs font-semibold" style={{ color: '#64748B' }}>{itemStatusConfig[itemStatus].label}</Text>
                       </View>
                     </View>
                     {item.status === "ready" && (
-                      <TouchableOpacity className="flex-row w-full bg-green-600 mt-2 py-2 rounded-xl items-center justify-center" onPress={() => handleMarkServed(item.id)}>
-                        <Check size={16} color="#fff" className="mr-2" />
-                        <Text className="text-white font-medium ml-2">Đánh dấu đã phục vụ</Text>
+                      <TouchableOpacity 
+                        className="flex-row w-full mt-3 py-3 rounded-3xl items-center justify-center" 
+                        style={{
+                          backgroundColor: '#C4E4D4',
+                          ...neumorphicInset,
+                        }}
+                        onPress={() => handleMarkServed(item.id)}
+                      >
+                        <Check size={16} color="#64748B" className="mr-2" />
+                        <Text className="font-semibold text-sm ml-2" style={{ color: '#64748B' }}>Đánh dấu đã phục vụ</Text>
                       </TouchableOpacity>
                     )}
                   </View>
                 );
               })}
               {/* Order Summary */}
-              <View className="border-t border-gray-200 mt-5 pt-4">
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Tạm tính:</Text>
-                  <Text className="text-base">${Number(order.subtotal).toFixed(2)}</Text>
+              <View className="mt-6 pt-5 border-t" style={{ borderTopColor: '#D1D1D1' }}>
+                <View className="flex-row justify-between mb-2">
+                  <Text className="text-base" style={{ color: '#94A3B8' }}>Tạm tính:</Text>
+                  <Text className="text-base font-semibold" style={{ color: '#64748B' }}>${Number(order.subtotal).toFixed(2)}</Text>
                 </View>
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Thuế:</Text>
-                  <Text className="text-base">${Number(order.tax).toFixed(2)}</Text>
+                <View className="flex-row justify-between mb-2">
+                  <Text className="text-base" style={{ color: '#94A3B8' }}>Thuế:</Text>
+                  <Text className="text-base font-semibold" style={{ color: '#64748B' }}>${Number(order.tax).toFixed(2)}</Text>
                 </View>
                 {!!order.discount && order.discount > 0 && (
-                  <View className="flex-row justify-between mb-1">
-                    <Text className="text-base text-green-600">Giảm giá:</Text>
-                    <Text className="text-base text-green-600">-${Number(order.discount).toFixed(2)}</Text>
+                  <View className="flex-row justify-between mb-2">
+                    <Text className="text-base" style={{ color: '#64748B' }}>Giảm giá:</Text>
+                    <Text className="text-base font-semibold" style={{ color: '#64748B' }}>-${Number(order.discount).toFixed(2)}</Text>
                   </View>
                 )}
-                <View className="flex-row justify-between mt-1">
-                  <Text className="text-lg font-bold">Tổng cộng:</Text>
-                  <Text className="text-lg font-bold text-green-600">${Number(order.total).toFixed(2)}</Text>
+                <View className="flex-row justify-between mt-3 pt-3 border-t" style={{ borderTopColor: '#D1D1D1' }}>
+                  <Text className="text-xl font-bold" style={{ color: '#64748B' }}>Tổng cộng:</Text>
+                  <Text className="text-xl font-bold" style={{ color: '#64748B' }}>${Number(order.total).toFixed(2)}</Text>
                 </View>
               </View>
             </View>
@@ -246,23 +348,51 @@ export default function TableDetail() {
         )}
       </ScrollView>
       {/* Actions fixed bottom */}
-      <View className="absolute left-0 right-0 bottom-0 p-4 bg-white border-t border-gray-200 flex-row gap-3" style={{shadowColor:'#aaa', shadowOpacity:0.12, elevation:6, paddingBottom: Platform.OS === 'ios' ? 20 : 10}}>
+      <View 
+        className="absolute left-0 right-0 bottom-0 p-6 flex-row gap-3 rounded-t-3xl" 
+        style={{
+          backgroundColor: '#EEEEEE',
+          paddingBottom: Platform.OS === 'ios' ? 20 : 10,
+          ...neumorphicOutset,
+        }}
+      >
         {!order ? null : (
           <>
-            <TouchableOpacity className="flex-1 bg-gray-200 flex-row items-center justify-center rounded-lg py-3" onPress={handleAddItems}>
-              <Plus size={18} color="#222" className="mr-2" />
-              <Text className="ml-2 font-semibold text-base">Thêm món</Text>
+            <TouchableOpacity 
+              className="flex-1 flex-row items-center justify-center rounded-3xl py-3.5" 
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicOutset,
+              }}
+              onPress={handleAddItems}
+            >
+              <Plus size={18} color="#64748B" className="mr-2" />
+              <Text className="ml-2 font-semibold text-sm" style={{ color: '#64748B' }}>Thêm món</Text>
             </TouchableOpacity>
             {order.status === "draft" && (
-              <TouchableOpacity className="flex-1 bg-blue-500 flex-row items-center justify-center rounded-lg py-3" onPress={handleSendToKitchen}>
-                <Send size={18} color="#fff" className="mr-2" />
-                <Text className="ml-2 font-semibold text-base text-white">Gửi bếp</Text>
+              <TouchableOpacity 
+                className="flex-1 flex-row items-center justify-center rounded-3xl py-3.5" 
+                style={{
+                  backgroundColor: '#B8D4E3',
+                  ...neumorphicInset,
+                }}
+                onPress={handleSendToKitchen}
+              >
+                <Send size={18} color="#64748B" className="mr-2" />
+                <Text className="ml-2 font-semibold text-sm" style={{ color: '#64748B' }}>Gửi bếp</Text>
               </TouchableOpacity>
             )}
             {order.status === "served" && (
-              <TouchableOpacity className="flex-1 bg-green-600 flex-row items-center justify-center rounded-lg py-3" onPress={handlePayment}>
-                <Check size={18} color="#fff" className="mr-2" />
-                <Text className="ml-2 font-semibold text-base text-white">Thanh toán</Text>
+              <TouchableOpacity 
+                className="flex-1 flex-row items-center justify-center rounded-3xl py-3.5" 
+                style={{
+                  backgroundColor: '#C4E4D4',
+                  ...neumorphicInset,
+                }}
+                onPress={handlePayment}
+              >
+                <Check size={18} color="#64748B" className="mr-2" />
+                <Text className="ml-2 font-semibold text-sm" style={{ color: '#64748B' }}>Thanh toán</Text>
               </TouchableOpacity>
             )}
           </>

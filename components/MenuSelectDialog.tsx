@@ -2,12 +2,12 @@ import menuItemsData from "@/services/fake-data/menu-items.json";
 import { Minus, Plus, ShoppingCart, X } from "lucide-react-native";
 import { useState } from "react";
 import {
-    Modal,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Modal,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface MenuItem {
@@ -32,13 +32,6 @@ interface MenuSelectionDialogProps {
   onClose: () => void;
   onConfirm: (items: OrderItem[]) => void;
 }
-
-const categoryColors: Record<string, string> = {
-  starter: "bg-green-500",
-  main: "bg-orange-500",
-  dessert: "bg-pink-500",
-  drink: "bg-blue-500",
-};
 
 const getCategoryLabel = (category: string) => {
   const labels: Record<string, string> = {
@@ -122,6 +115,21 @@ export function MenuSelectionDialog({
     0
   );
 
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
     <Modal
       visible={open}
@@ -129,17 +137,33 @@ export function MenuSelectionDialog({
       transparent
       onRequestClose={handleCancel}
     >
-      <View className="flex-1 justify-center items-center bg-black/20">
-        <View className="bg-white rounded-2xl w-[95%] max-h-[92%] flex-1 flex-col">
-          <View className="flex-row flex-1 items-center border-b border-gray-200 px-4 py-3 z-10 min-h-16 max-h-16">
-            <Text className="text-2xl font-bold flex-1 text-zinc-900">
+      <View className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+        <View 
+          className="rounded-3xl w-[95%] max-h-[92%] flex-1 flex-col"
+          style={{
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
+        >
+          <View 
+            className="flex-row flex-1 items-center px-6 py-4 z-10 min-h-16 max-h-16 rounded-t-3xl"
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: '#D1D1D1',
+            }}
+          >
+            <Text className="text-2xl font-bold flex-1" style={{ color: '#64748B' }}>
               Chọn món
             </Text>
             <TouchableOpacity
               onPress={handleCancel}
-              className="p-2 rounded-full bg-gray-100"
+              className="p-2 rounded-2xl"
+              style={{
+                backgroundColor: '#EEEEEE',
+                ...neumorphicInset,
+              }}
             >
-              <X size={22} color="#222" />
+              <X size={20} color="#64748B" />
             </TouchableOpacity>
           </View>
 
@@ -147,105 +171,138 @@ export function MenuSelectionDialog({
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="my-2 ml-2 min-h-10 max-h-10"
+            className="my-4 ml-4 min-h-10 max-h-10"
           >
-            {categories.map((cat) => (
-              <TouchableOpacity
-                key={cat}
-                className={
-                  `px-4 py-2 rounded-full border mr-2 ` +
-                  (selectedCategory === cat
-                    ? "bg-green-600 border-green-600"
-                    : "bg-white border-gray-200")
-                }
-                onPress={() => setSelectedCategory(cat)}
-              >
-                <Text
-                  className={
-                    `text-base font-semibold ` +
-                    (selectedCategory === cat ? "text-white" : "text-zinc-900")
-                  }
+            {categories.map((cat) => {
+              const pastelColors: Record<string, string> = {
+                all: '#B8D4E3',
+                main: '#F4D1AE',
+                starter: '#C4E4D4',
+                drink: '#B8D4E3',
+                dessert: '#F2C2D1',
+              };
+              const isActive = selectedCategory === cat;
+              return (
+                <TouchableOpacity
+                  key={cat}
+                  className="px-5 py-2.5 rounded-3xl mr-2"
+                  style={{
+                    backgroundColor: isActive ? pastelColors[cat] || '#EEEEEE' : '#EEEEEE',
+                    ...(isActive ? neumorphicInset : neumorphicOutset),
+                  }}
+                  onPress={() => setSelectedCategory(cat)}
                 >
-                  {cat === "all" ? "Tất cả" : getCategoryLabel(cat)}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: '#64748B' }}
+                  >
+                    {cat === "all" ? "Tất cả" : getCategoryLabel(cat)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
 
           {/* Menu grid */}
           <ScrollView className="flex-1">
-            <View className="flex flex-col gap-2 mx-3 my-2">
+            <View className="flex flex-col gap-3 mx-4 my-3">
               {filteredItems.map((item) => {
                 const selectedItem = selectedItems.get(item.id);
+                const pastelColors: Record<string, string> = {
+                  main: '#F4D1AE',
+                  starter: '#C4E4D4',
+                  drink: '#B8D4E3',
+                  dessert: '#F2C2D1',
+                };
                 return (
                   <View
                     key={item.id}
-                    className="bg-white rounded-xl mb-2 shadow border border-gray-100 min-w-[10px]"
+                    className="rounded-3xl mb-2 min-w-[10px]"
+                    style={{
+                      backgroundColor: '#EEEEEE',
+                      ...neumorphicOutset,
+                    }}
                   >
-                    <View className="p-3">
-                      <View className="flex-row items-center justify-between gap-2 mb-2">
+                    <View className="p-4">
+                      <View className="flex-row items-center justify-between gap-3 mb-3">
                         <View className="flex-1 min-w-0">
                           <Text
-                            className="font-semibold text-lg mb-[1px] text-zinc-900"
+                            className="font-bold text-lg mb-1"
+                            style={{ color: '#64748B' }}
                             numberOfLines={1}
                           >
                             {item.name}
                           </Text>
                           <Text
-                            className="text-sm text-gray-500 mb-1"
+                            className="text-sm mb-2 leading-relaxed"
+                            style={{ color: '#94A3B8' }}
                             numberOfLines={2}
                           >
                             {item.description}
                           </Text>
-                          <View className="flex-row items-center mt-1">
+                          <View className="flex-row items-center mt-2">
                             <View
-                              className={`rounded-full px-3 py-1 ${
-                                categoryColors[item.category] || "bg-gray-200"
-                              } mr-2 items-center`}
+                              className="px-3 py-1 rounded-2xl mr-2 items-center"
+                              style={{
+                                backgroundColor: pastelColors[item.category] || '#D4C5E8',
+                                ...neumorphicInset,
+                              }}
                             >
-                              <Text className="text-xs text-white font-bold">
+                              <Text className="text-xs font-bold" style={{ color: '#64748B' }}>
                                 {getCategoryLabel(item.category)}
                               </Text>
                             </View>
-                            <Text className="text-sm text-gray-400">
+                            <Text className="text-xs" style={{ color: '#94A3B8' }}>
                               {item.prep_time_minutes} phút
                             </Text>
                           </View>
                         </View>
-                        <Text className="font-bold text-green-600 text-lg ml-2">
+                        <Text className="font-bold text-lg ml-2" style={{ color: '#64748B' }}>
                           {item.price.toLocaleString("vi-VN")}₫
                         </Text>
                       </View>
-                      <View className="flex-row items-center gap-2 mt-2">
+                      <View className="flex-row items-center gap-2 mt-3 border-t pt-3" style={{ borderTopColor: '#D1D1D1' }}>
                         {selectedItem ? (
                           <>
                             <TouchableOpacity
-                              className="bg-gray-100 rounded-md p-2 min-w-[32px] items-center justify-center"
+                              className="rounded-2xl p-2 min-w-[36px] items-center justify-center"
+                              style={{
+                                backgroundColor: '#EEEEEE',
+                                ...neumorphicOutset,
+                              }}
                               onPress={() => handleRemoveItem(item.id)}
                             >
-                              <Minus size={18} color="#333" />
+                              <Minus size={18} color="#64748B" />
                             </TouchableOpacity>
-                            <Text className="font-semibold text-base text-zinc-900 min-w-[30px] text-center">
+                            <Text className="font-bold text-lg min-w-[30px] text-center" style={{ color: '#64748B' }}>
                               {selectedItem.quantity}
                             </Text>
                             <TouchableOpacity
-                              className="bg-gray-100 rounded-md p-2 min-w-[32px] items-center justify-center"
+                              className="rounded-2xl p-2 min-w-[36px] items-center justify-center"
+                              style={{
+                                backgroundColor: '#C4E4D4',
+                                ...neumorphicInset,
+                              }}
                               onPress={() => handleAddItem(item)}
                             >
-                              <Plus size={18} color="#333" />
+                              <Plus size={18} color="#64748B" />
                             </TouchableOpacity>
                           </>
                         ) : (
                           <TouchableOpacity
-                            className="bg-green-600 rounded-lg flex-row items-center justify-center py-2 mt-1 flex-1"
+                            className="rounded-3xl flex-row items-center justify-center py-2.5 mt-1 flex-1"
+                            style={{
+                              backgroundColor: '#EEEEEE',
+                              ...neumorphicOutset,
+                            }}
                             onPress={() => handleAddItem(item)}
                           >
                             <Plus
                               size={17}
-                              color="#fff"
+                              color="#64748B"
                               style={{ marginRight: 4 }}
                             />
-                            <Text className="text-white font-bold ml-2">
+                            <Text className="font-bold ml-2 text-sm" style={{ color: '#64748B' }}>
                               Thêm
                             </Text>
                           </TouchableOpacity>
@@ -259,20 +316,32 @@ export function MenuSelectionDialog({
 
             {/* Selected Items */}
             {selectedItems.size > 0 && (
-              <View className="mt-4 px-2 border-t border-gray-200 bg-zinc-50 rounded-xl mb-4 py-2">
-                <Text className="font-bold text-lg mb-2 text-zinc-900">
+              <View 
+                className="mt-4 px-4 rounded-3xl mb-4 py-4"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  borderTopWidth: 1,
+                  borderTopColor: '#D1D1D1',
+                  ...neumorphicInset,
+                }}
+              >
+                <Text className="font-bold text-lg mb-3" style={{ color: '#64748B' }}>
                   Món đã chọn ({selectedItems.size})
                 </Text>
                 {Array.from(selectedItems.values()).map((item) => (
                   <View
                     key={item.menu_item.id}
-                    className="bg-white rounded-lg my-2 p-2 border border-gray-200"
+                    className="rounded-3xl my-2 p-3"
+                    style={{
+                      backgroundColor: '#EEEEEE',
+                      ...neumorphicOutset,
+                    }}
                   >
-                    <View className="flex-row items-center justify-between mb-1">
-                      <Text className="font-medium text-base text-zinc-900 flex-1">
+                    <View className="flex-row items-center justify-between mb-2">
+                      <Text className="font-semibold text-base flex-1" style={{ color: '#64748B' }}>
                         {item.menu_item.name}
                       </Text>
-                      <Text className="text-sm text-gray-500">
+                      <Text className="text-sm" style={{ color: '#94A3B8' }}>
                         {item.quantity} ×{" "}
                         {item.menu_item.price.toLocaleString("vi-VN")}₫ ={" "}
                         {(item.quantity * item.menu_item.price).toLocaleString(
@@ -287,10 +356,15 @@ export function MenuSelectionDialog({
                       onChangeText={(txt) =>
                         handleNoteChange(item.menu_item.id, txt)
                       }
-                      className={`bg-gray-50 rounded-md border border-gray-200 px-3 py-2 text-sm text-zinc-900 mt-1 min-h-[32px]`}
+                      className="rounded-2xl px-3 py-2 text-sm mt-2 min-h-[36px]"
+                      style={{
+                        backgroundColor: '#EEEEEE',
+                        color: '#64748B',
+                        ...neumorphicInset,
+                      }}
                       multiline
                       numberOfLines={2}
-                      placeholderTextColor="#888"
+                      placeholderTextColor="#94A3B8"
                     />
                   </View>
                 ))}
@@ -299,35 +373,49 @@ export function MenuSelectionDialog({
           </ScrollView>
 
           {/* Footer */}
-          <View className="border-t border-gray-100 bg-zinc-50 px-4 pt-3 pb-5">
-            <View className="flex-row justify-between items-center mb-3">
-              <Text className="font-bold text-base text-zinc-900">
+          <View 
+            className="px-6 pt-4 pb-6 rounded-b-3xl"
+            style={{
+              backgroundColor: '#EEEEEE',
+              borderTopWidth: 1,
+              borderTopColor: '#D1D1D1',
+              ...neumorphicOutset,
+            }}
+          >
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="font-bold text-base" style={{ color: '#64748B' }}>
                 Tổng tạm tính:
               </Text>
-              <Text className="font-bold text-lg text-green-600">
+              <Text className="font-bold text-xl" style={{ color: '#64748B' }}>
                 {totalAmount.toLocaleString("vi-VN")}₫
               </Text>
             </View>
-            <View className="flex-row gap-2">
+            <View className="flex-row gap-3">
               <TouchableOpacity
-                className="flex-1 rounded-lg py-3 bg-gray-200 items-center justify-center"
+                className="flex-1 rounded-3xl py-3.5 items-center justify-center"
+                style={{
+                  backgroundColor: '#EEEEEE',
+                  ...neumorphicOutset,
+                }}
                 onPress={handleCancel}
               >
-                <Text className="font-bold text-base text-zinc-800">Hủy</Text>
+                <Text className="font-bold text-sm" style={{ color: '#64748B' }}>Hủy</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-1 rounded-lg py-3 flex-row items-center justify-center ${
-                  selectedItems.size === 0 ? "bg-gray-300" : "bg-green-600"
-                }`}
+                className="flex-1 rounded-3xl py-3.5 flex-row items-center justify-center"
+                style={{
+                  backgroundColor: selectedItems.size === 0 ? '#EEEEEE' : '#C4E4D4',
+                  ...(selectedItems.size === 0 ? neumorphicOutset : neumorphicInset),
+                }}
                 onPress={handleConfirm}
                 disabled={selectedItems.size === 0}
               >
                 <ShoppingCart
                   size={17}
-                  color="#fff"
+                  color="#64748B"
                   style={{ marginRight: 4 }}
                 />
-                <Text className="font-bold text-base text-white ml-1">
+                <Text className="font-bold text-sm ml-1" style={{ color: '#64748B' }}>
                   Xác nhận ({selectedItems.size})
                 </Text>
               </TouchableOpacity>

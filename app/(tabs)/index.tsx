@@ -3,21 +3,21 @@ import { useTableContext } from "@/context/TableContext";
 import usersData from "@/services/fake-data/users.json";
 import { useRouter } from "expo-router";
 import {
-  ChefHat,
-  ClipboardList,
-  LogOut,
-  MenuIcon,
-  User,
-  Users,
-  UtensilsCrossed,
+    ChefHat,
+    ClipboardList,
+    LogOut,
+    MenuIcon,
+    User,
+    Users,
+    UtensilsCrossed,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
+    Pressable,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -87,133 +87,213 @@ export default function Dashboard() {
     router.push(`/table/${table.id}`);
   };
 
+  // Neumorphic shadow styles
+  const neumorphicOutset = {
+    shadowColor: '#D1D1D1',
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  };
+  const neumorphicInset = {
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: -4,
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-zinc-50">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: '#E8E8E8' }}>
       {/* Header */}
-      <View className="border-b bg-white shadow-sm flex-row items-center justify-between px-4 py-4">
-        <View className="flex-row items-center gap-x-3">
-          <View className="w-10 h-10 bg-green-700 rounded-full items-center justify-center mr-3">
-            <UtensilsCrossed color="#fff" size={22} />
+      <View 
+        className="flex-row items-center justify-between px-6 py-5 rounded-b-3xl"
+        style={{ 
+          backgroundColor: '#EEEEEE',
+          ...neumorphicOutset,
+        }}
+      >
+        <View className="flex-row items-center gap-x-4">
+          <View 
+            className="w-14 h-14 rounded-2xl items-center justify-center"
+            style={{ 
+              backgroundColor: '#EEEEEE',
+              ...neumorphicInset,
+            }}
+          >
+            <UtensilsCrossed color="#94A3B8" size={24} />
           </View>
           <View>
-            <Text className="text-xl font-bold text-zinc-900">
+            <Text className="text-2xl font-bold" style={{ color: '#64748B' }}>
               Restaurant POS
             </Text>
-            <Text className="text-sm text-gray-500">{user?.full_name}</Text>
+            <Text className="text-sm" style={{ color: '#94A3B8' }}>{user?.full_name}</Text>
           </View>
         </View>
         <TouchableOpacity
-          className="flex-row items-center border border-gray-300 rounded-md px-3 py-2 bg-white active:bg-gray-100"
+          className="flex-row items-center rounded-2xl px-4 py-2.5"
+          style={{ 
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
           onPress={handleLogout}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
-          <LogOut size={18} color="#222" className="mr-1" />
-          <Text className="text-sm font-medium ml-1">Đăng xuất</Text>
+          <LogOut size={18} color="#64748B" className="mr-2" />
+          <Text className="text-sm font-semibold" style={{ color: '#64748B' }}>Đăng xuất</Text>
         </TouchableOpacity>
       </View>
       {/* Quick Actions */}
-      <View className="flex-row flex-wrap justify-between px-3 mt-4 mb-2 gap-2">
+      <View className="flex-row flex-wrap justify-between px-4 mt-6 mb-4 gap-3">
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-24 rounded-3xl items-center justify-center"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
           onPress={() => router.push("/(tabs)/orders")}
-          activeOpacity={0.80}
+          activeOpacity={0.7}
         >
-          <ClipboardList size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">
+          <ClipboardList size={28} color="#94A3B8" />
+          <Text className="mt-2 text-sm font-semibold" style={{ color: '#64748B' }}>
             Đơn hàng
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-24 rounded-3xl items-center justify-center"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
           onPress={() => router.push("/pages/kitchen")}
-          activeOpacity={0.80}
+          activeOpacity={0.7}
         >
-          <ChefHat size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Bếp</Text>
+          <ChefHat size={28} color="#94A3B8" />
+          <Text className="mt-2 text-sm font-semibold" style={{ color: '#64748B' }}>Bếp</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-24 rounded-3xl items-center justify-center"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
           onPress={() => router.push("/pages/Menu")}
-          activeOpacity={0.80}
+          activeOpacity={0.7}
         >
-          <MenuIcon size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Thực đơn</Text>
+          <MenuIcon size={28} color="#94A3B8" />
+          <Text className="mt-2 text-sm font-semibold" style={{ color: '#64748B' }}>Thực đơn</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-24 rounded-3xl items-center justify-center"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: '#EEEEEE',
+            ...neumorphicOutset,
+          }}
           onPress={() => router.push("/(tabs)/profile")}
-          activeOpacity={0.80}
+          activeOpacity={0.7}
         >
-          <User size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Tài khoản</Text>
+          <User size={28} color="#94A3B8" />
+          <Text className="mt-2 text-sm font-semibold" style={{ color: '#64748B' }}>Tài khoản</Text>
         </TouchableOpacity>
       </View>
       {/* Content */}
       <ScrollView
-        className="flex-1 px-3 pb-5"
+        className="flex-1 px-4 pb-5"
         contentContainerStyle={{ paddingBottom: 24 }}
       >
         {/* Stats */}
-        <View className="flex-row flex-wrap mt-6 mb-4 justify-between gap-y-3">
+        <View className="flex-row flex-wrap mt-4 mb-4 justify-between gap-y-4">
           {Object.entries(statusConfig).map(([status, config]) => {
             const count = tables.filter((t) => t.status === status).length;
+            const pastelColors: Record<string, string> = {
+              available: '#C4E4D4',
+              occupied: '#F4D1AE',
+              reserved: '#B8D4E3',
+              dirty: '#F2C2D1',
+            };
             return (
               <View
                 key={status}
-                className={`w-[47%] bg-white rounded-xl p-4 flex-row items-center justify-between shadow-sm mb-2 active:scale-95`}
-                style={{ marginBottom: 10, minWidth: 140 }}
+                className="w-[47%] rounded-3xl p-5 flex-row items-center justify-between"
+                style={{ 
+                  marginBottom: 10, 
+                  minWidth: 140,
+                  backgroundColor: '#EEEEEE',
+                  ...neumorphicOutset,
+                }}
               >
                 <View>
-                  <Text className="text-sm text-gray-400">{config.label}</Text>
-                  <Text className="text-2xl font-bold mt-1">{count}</Text>
+                  <Text className="text-xs font-medium" style={{ color: '#94A3B8' }}>{config.label}</Text>
+                  <Text className="text-3xl font-bold mt-1" style={{ color: '#64748B' }}>{count}</Text>
                 </View>
-                <View className={`w-[18px] h-[18px] rounded-full ${config.bg}`} />
+                <View 
+                  className="w-5 h-5 rounded-full"
+                  style={{ backgroundColor: pastelColors[status] || '#D4C5E8' }}
+                />
               </View>
             );
           })}
         </View>
         {/* By location group */}
         {Object.entries(groupedTables).map(([location, locationTables]) => (
-          <View key={location} className="mt-3">
-            <View className="flex-row gap-2 items-center mb-4">
-              <Users size={18} color="#222" />
-              <Text className="text-lg font-semibold capitalize">
+          <View key={location} className="mt-6">
+            <View className="flex-row gap-3 items-center mb-5">
+              <View 
+                className="w-10 h-10 rounded-2xl items-center justify-center"
+                style={{ 
+                  backgroundColor: '#EEEEEE',
+                  ...neumorphicInset,
+                }}
+              >
+                <Users size={18} color="#94A3B8" />
+              </View>
+              <Text className="text-lg font-bold capitalize" style={{ color: '#64748B' }}>
                 Khu vực: {location}
               </Text>
             </View>
             <View className="flex-row flex-wrap gap-x-3">
               {(locationTables as Table[]).map((table) => {
                 const config = statusConfig[table.status as TableStatus];
+                const pastelColors: Record<string, string> = {
+                  available: '#C4E4D4',
+                  occupied: '#F4D1AE',
+                  reserved: '#B8D4E3',
+                  dirty: '#F2C2D1',
+                };
                 return (
                   <Pressable
                     key={table.id}
                     onPress={() => handleTableClick(table)}
-                    className={`mb-3 active:scale-95 ${config.bg}`}
+                    className="mb-3 rounded-3xl"
                     style={{
-                      minWidth: 105,
-                      width: 108,
-                      borderRadius: 16,
-                      marginRight: 12,
-                      shadowColor: "#aaa",
-                      shadowOpacity: 0.08,
-                      elevation: 2,
+                      minWidth: 110,
+                      width: 110,
+                      marginRight: 0,
+                      backgroundColor: pastelColors[table.status] || '#D4C5E8',
+                      ...neumorphicOutset,
                     }}
                   >
-                    <View className="p-4 items-center justify-center">
-                      <Text className="text-2xl font-bold text-white mb-1">
+                    <View className="p-5 items-center justify-center">
+                      <Text className="text-3xl font-bold mb-2" style={{ color: '#64748B' }}>
                         {table.table_number}
                       </Text>
-                      <View className="flex-row items-center bg-white/20 rounded-full px-3 py-0.5 mb-1 mt-1">
-                        <Users size={14} color="#fff" style={{marginRight: 4}} />
-                        <Text className="ml-1 text-xs text-white font-semibold">
+                      <View 
+                        className="flex-row items-center rounded-2xl px-3 py-1 mb-2"
+                        style={{ 
+                          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                          ...neumorphicInset,
+                        }}
+                      >
+                        <Users size={12} color="#64748B" style={{marginRight: 4}} />
+                        <Text className="text-xs font-semibold" style={{ color: '#64748B' }}>
                           {table.seats} chỗ
                         </Text>
                       </View>
-                      <Text className="text-white text-xs font-medium mt-1">
+                      <Text className="text-xs font-medium" style={{ color: '#64748B' }}>
                         {config.label}
                       </Text>
                     </View>
