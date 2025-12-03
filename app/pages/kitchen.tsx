@@ -1,5 +1,6 @@
 import ordersData from "@/services/fake-data/orders.json";
 import tablesData from "@/services/fake-data/tables.json";
+import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import {
   AlertCircle,
@@ -101,165 +102,267 @@ const Kitchen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
-      <View className="flex-1 bg-[#F8F8F8]">
-        {/* Header */}
-        <View className="border-b border-[#E0E0E0] bg-white px-5 py-2 shadow-sm">
-          <View className="flex-row items-center gap-3">
-            <Pressable
-              className="rounded-full bg-gray-100 p-1 mr-2"
-              onPress={() => router.back()}
-            >
-              <ArrowLeft size={22} color="#222" />
-            </Pressable>
-            <View>
-              <Text className="text-xl font-bold text-[#222]">
-                Màn hình bếp
-              </Text>
-              <Text className="text-base text-gray-500 mt-1">
-                {filteredItems.length} món đang chờ
-              </Text>
-            </View>
-          </View>
-        </View>
-        {/* Filter Tabs */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 2 }}
-          className="py-0 my-3 px-3"
-        >
-          <TouchableOpacity
-            className={`rounded-full px-4 py-1.5 mr-2 border ${
-              filterStatus === "all"
-                ? "bg-green-700 border-green-700"
-                : "bg-white border-[#eee]"
-            }`}
-            onPress={() => setFilterStatus("all")}
+    <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+      {/* Gradient Background Layers */}
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#9333EA',
+          opacity: 0.5,
+        }}
+      />
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#EC4899',
+          opacity: 0.3,
+        }}
+      />
+      
+      <SafeAreaView className="flex-1">
+        <View className="flex-1">
+          {/* Header */}
+          <BlurView
+            intensity={20}
+            tint="light"
+            className="px-6 py-5 rounded-b-3xl overflow-hidden"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderBottomWidth: 1,
+              borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+            }}
           >
-            <Text
-              className={`text-base font-semibold ${
-                filterStatus === "all" ? "text-white" : "text-[#222]"
-              }`}
-            >
-              Đang làm
-            </Text>
-          </TouchableOpacity>
-          {Object.entries(statusConfig)
-            .filter(([status]) => status !== "served" && status !== "cancelled")
-            .map(([status, config]) => (
-              <TouchableOpacity
-                key={status}
-                className={`rounded-full px-4 py-1.5 mr-2 border ${
-                  filterStatus === status
-                    ? "bg-green-700 border-green-700"
-                    : "bg-white border-[#eee]"
-                }`}
-                onPress={() => setFilterStatus(status as ItemStatus)}
+            {/* Light source highlight */}
+            <View
+              className="absolute top-0 left-0 right-0 h-1/2"
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              }}
+            />
+            <View className="flex-row items-center gap-4">
+              <Pressable
+                className="rounded-2xl p-2"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+                onPress={() => router.back()}
               >
-                <Text
-                  className={`text-base font-semibold ${
-                    filterStatus === status ? "text-white" : "text-[#222]"
-                  }`}
-                >
-                  {config.label}
+                <ArrowLeft size={20} color="#FFFFFF" />
+              </Pressable>
+              <View>
+                <Text className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>
+                  Màn hình bếp
                 </Text>
-              </TouchableOpacity>
-            ))}
-        </ScrollView>
-        {/* Kitchen Items Grid */}
-        <ScrollView className="px-3 pb-9">
-          <View className="flex-row flex-wrap">
-            {filteredItems.map((item) => {
-              const config = statusConfig[item.status];
-              const StatusIcon = config.icon;
-              return (
-                <View
-                  key={item.id}
-                  className="w-full bg-white rounded-2xl p-4 my-2 mr-3 shadow-sm flex-1 min-w-[160px] max-w-[480px]"
-                >
-                  <View className="flex-row justify-between items-start">
-                    <View className="flex-1">
-                      <Text className="font-bold text-lg text-[#222]">
-                        Bàn {getTableNumber(item.table_id)}
-                      </Text>
-                      <Text className="text-[13px] text-gray-400 mt-1">
-                        {formatTime(item.received_at)}
-                      </Text>
-                    </View>
-                    <View
-                      className={`flex-row items-center px-3 py-1 rounded-full ml-2 ${config.color}`}
-                      style={{ gap: 4 }}
+                <Text className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                  {filteredItems.length} món đang chờ
+                </Text>
+              </View>
+            </View>
+          </BlurView>
+          {/* Filter Tabs */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 3 }}
+            className="py-0 my-4 px-4"
+          >
+            <TouchableOpacity
+              className="px-5 py-2.5 rounded-3xl"
+              style={{
+                backgroundColor: filterStatus === "all" ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+              }}
+              onPress={() => setFilterStatus("all")}
+            >
+              <Text
+                className="text-sm font-semibold"
+                style={{ color: '#FFFFFF' }}
+              >
+                Đang làm
+              </Text>
+            </TouchableOpacity>
+            {Object.entries(statusConfig)
+              .filter(([status]) => status !== "served" && status !== "cancelled")
+              .map(([status, config]) => {
+                const isActive = filterStatus === status;
+                return (
+                  <TouchableOpacity
+                    key={status}
+                    className="px-5 py-2.5 rounded-3xl"
+                    style={{
+                      backgroundColor: isActive ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    }}
+                    onPress={() => setFilterStatus(status as ItemStatus)}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: '#FFFFFF' }}
                     >
-                      <StatusIcon
-                        color="#fff"
-                        size={14}
-                        style={{ marginRight: 4 }}
-                      />
-                      <Text className="text-white text-xs font-bold ml-1">
-                        {config.label}
-                      </Text>
-                    </View>
-                  </View>
-                  <View className="mt-2">
-                    <View className="flex-row justify-between items-center">
-                      <Text className="font-semibold text-base text-[#212121]">
-                        {item.menu_item_name}
-                      </Text>
-                      <Text className="font-bold text-lg text-[#181818]">
-                        x{item.quantity}
-                      </Text>
-                    </View>
-                    {item.note ? (
-                      <Text className="text-xs text-gray-500 bg-gray-100 px-2 py-1 mt-1 rounded italic">
-                        Ghi chú: {item.note}
-                      </Text>
-                    ) : null}
-                  </View>
-                  <View className="flex-row mt-3">
-                    {item.status === "waiting" && (
-                      <TouchableOpacity
-                        className="flex-1 bg-gray-100 rounded-lg items-center justify-center py-2 mr-2"
-                        onPress={() => handleStatusChange(item.id, "preparing")}
-                      >
-                        <Text className="font-bold text-green-800 text-base">
-                          Bắt đầu làm
+                      {config.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+          </ScrollView>
+          {/* Kitchen Items Grid */}
+          <ScrollView className="px-4 pb-9">
+            <View className="flex-row flex-wrap">
+              {filteredItems.map((item) => {
+                const config = statusConfig[item.status];
+                const StatusIcon = config.icon;
+                return (
+                  <BlurView
+                    key={item.id}
+                    intensity={15}
+                    tint="light"
+                    className="w-full rounded-3xl p-5 my-3 mr-3 flex-1 min-w-[160px] max-w-[480px] overflow-hidden"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    }}
+                  >
+                    {/* Light reflection */}
+                    <View
+                      className="absolute top-0 left-0 right-0 h-1/4"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                      }}
+                    />
+                    <View className="flex-row justify-between items-start mb-3">
+                      <View className="flex-1">
+                        <Text className="font-bold text-xl" style={{ color: '#FFFFFF' }}>
+                          Bàn {getTableNumber(item.table_id)}
                         </Text>
-                      </TouchableOpacity>
-                    )}
-                    {item.status === "preparing" && (
-                      <TouchableOpacity
-                        className="flex-1 bg-green-500 rounded-lg items-center justify-center py-2 mr-2"
-                        onPress={() => handleStatusChange(item.id, "ready")}
-                      >
-                        <Text className="font-bold text-white text-base">
-                          Hoàn thành
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                    {item.status === "ready" && (
-                      <View className="flex-1 bg-gray-100 rounded-lg items-center justify-center py-2 mr-2">
-                        <Text className="font-bold text-gray-400 text-base">
-                          Chờ phục vụ
+                        <Text className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                          {formatTime(item.received_at)}
                         </Text>
                       </View>
-                    )}
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-          {filteredItems.length === 0 && (
-            <View className="items-center justify-center mt-16 mb-6 opacity-80">
-              <ChefHat size={65} color="#9CA3AF" style={{ opacity: 0.5 }} />
-              <Text className="text-gray-400 text-xl mt-3 text-center">
-                Không có món nào cần làm
-              </Text>
+                      <View
+                        className="flex-row items-center px-3 py-1.5 rounded-2xl ml-2"
+                        style={{ 
+                          gap: 4,
+                          backgroundColor: config.color === 'bg-yellow-400' ? 'rgba(234, 179, 8, 0.3)' :
+                                         config.color === 'bg-orange-400' ? 'rgba(251, 146, 60, 0.3)' :
+                                         config.color === 'bg-green-500' ? 'rgba(16, 185, 129, 0.3)' :
+                                         config.color === 'bg-gray-400' ? 'rgba(156, 163, 175, 0.3)' :
+                                         'rgba(239, 68, 68, 0.3)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.3)',
+                        }}
+                      >
+                        <StatusIcon
+                          color="#FFFFFF"
+                          size={12}
+                          style={{ marginRight: 4 }}
+                        />
+                        <Text className="text-xs font-bold" style={{ color: '#FFFFFF' }}>
+                          {config.label}
+                        </Text>
+                      </View>
+                    </View>
+                    <View className="mt-3 pt-3" style={{ borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.2)' }}>
+                      <View className="flex-row justify-between items-center">
+                        <Text className="font-bold text-lg flex-1" style={{ color: '#FFFFFF' }}>
+                          {item.menu_item_name}
+                        </Text>
+                        <Text className="font-bold text-xl ml-2" style={{ color: '#FFFFFF' }}>
+                          x{item.quantity}
+                        </Text>
+                      </View>
+                      {item.note ? (
+                        <View 
+                          className="px-3 py-2 mt-2 rounded-2xl"
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                          }}
+                        >
+                          <Text className="text-xs italic" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+                            Ghi chú: {item.note}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                    <View className="flex-row mt-4">
+                      {item.status === "waiting" && (
+                        <TouchableOpacity
+                          className="flex-1 rounded-2xl items-center justify-center py-3"
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                          }}
+                          onPress={() => handleStatusChange(item.id, "preparing")}
+                        >
+                          <Text className="font-bold text-sm" style={{ color: '#FFFFFF' }}>
+                            Bắt đầu làm
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      {item.status === "preparing" && (
+                        <TouchableOpacity
+                          className="flex-1 rounded-2xl items-center justify-center py-3"
+                          style={{
+                            backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                          }}
+                          onPress={() => handleStatusChange(item.id, "ready")}
+                        >
+                          <Text className="font-bold text-sm" style={{ color: '#FFFFFF' }}>
+                            Hoàn thành
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      {item.status === "ready" && (
+                        <View 
+                          className="flex-1 rounded-2xl items-center justify-center py-3"
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                          }}
+                        >
+                          <Text className="font-bold text-sm" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                            Chờ phục vụ
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </BlurView>
+                );
+              })}
             </View>
-          )}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+            {filteredItems.length === 0 && (
+              <View className="items-center justify-center mt-20 mb-6">
+                <View 
+                  className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <ChefHat size={40} color="#FFFFFF" />
+                </View>
+                <Text className="text-base mt-2 text-center" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                  Không có món nào cần làm
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 

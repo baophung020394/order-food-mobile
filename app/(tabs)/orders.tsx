@@ -1,5 +1,6 @@
 import { useOrderContext } from "@/context/OrderContext";
 import tablesData from "@/services/fake-data/tables.json";
+import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import { ArrowLeft, CheckCircle, Clock, Search, XCircle } from "lucide-react-native";
 import { useState } from "react";
@@ -54,49 +55,142 @@ export default function Orders() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
-      {/* Header */}
-      <View className="bg-white border-b shadow-sm px-4 py-4 flex-row items-center gap-3">
-        <Pressable
-          className="rounded-full bg-gray-100 p-1 mr-2"
-          onPress={() => router.back()}
+    <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+      {/* Gradient Background Layers */}
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#9333EA',
+          opacity: 0.5,
+        }}
+      />
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#EC4899',
+          opacity: 0.3,
+        }}
+      />
+      
+      <SafeAreaView className="flex-1">
+        {/* Header */}
+        <BlurView
+          intensity={20}
+          tint="light"
+          className="px-6 py-5 flex-row items-center gap-4"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+          }}
         >
-          <ArrowLeft size={22} color="#222" />
-        </Pressable>
-        <Text className="text-xl font-bold">Danh sách đơn hàng</Text>
-      </View>
+          {/* Light source highlight */}
+          <View
+            className="absolute top-0 left-0 right-0 h-1/2"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            }}
+          />
+          <Pressable
+            className="rounded-2xl p-2"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+            }}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft size={20} color="#FFFFFF" />
+          </Pressable>
+          <Text className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>Đơn hàng</Text>
+        </BlurView>
       {/* Search & Filter */}
-      <View className="px-4 py-3 bg-[#F8F8F8]">
-        <View className="relative mb-2">
+      <View className="px-4 py-5">
+        <View className="relative mb-4">
           <Search
             size={18}
-            color="#999"
-            style={{ position: "absolute", left: 14, top: 13 }}
+            color="rgba(255, 255, 255, 0.8)"
+            style={{ position: "absolute", left: 16, top: 14, zIndex: 1 }}
           />
-          <TextInput
-            className="h-11 bg-white pl-10 pr-3 rounded-lg border border-[#E0E0E0] text-[15px]"
-            placeholder="Tìm theo số bàn..."
-            placeholderTextColor="#aaa"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2 mt-2 pb-1">
-          <Pressable
-            onPress={() => setFilterStatus("all")}
-            className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === "all" ? "bg-[#4CAF50] border-[#4CAF50]" : "bg-white border-[#E0E0E0]"}`}
+          <BlurView
+            intensity={15}
+            tint="light"
+            className="h-12 pl-12 pr-4 rounded-3xl overflow-hidden"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+            }}
           >
-            <Text className={`font-semibold ${filterStatus === "all" ? "text-white" : "text-[#333]"}`}>Tất cả</Text>
-          </Pressable>
-          {Object.entries(statusConfig).map(([status, config]) => (
+            {/* Light reflection */}
+            <View
+              className="absolute top-0 left-0 right-0 h-1/3"
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24,
+              }}
+            />
+            <TextInput
+              className="h-full text-base"
+              style={{
+                color: '#FFFFFF',
+              }}
+              placeholder="Tìm theo số bàn..."
+              placeholderTextColor="rgba(255, 255, 255, 0.6)"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </BlurView>
+        </View>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false} 
+          className="flex-row mt-2 pb-1"
+          contentContainerStyle={{ gap: 12, paddingHorizontal: 4 }}
+        >
+          <BlurView
+            intensity={15}
+            tint="light"
+            className="px-5 py-2.5 rounded-3xl overflow-hidden max-h-10"
+            style={{
+              backgroundColor: filterStatus === "all" ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              flexShrink: 0,
+            }}
+          >
             <Pressable
-              key={status}
-              onPress={() => setFilterStatus(status as OrderStatus)}
-              className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === status ? `bg-[${config.bg}] border-[${config.bg}]` : "bg-white border-[#E0E0E0]"}`}
+              onPress={() => setFilterStatus("all")}
+              className="w-full h-full items-center justify-center"
             >
-              <Text className={`font-semibold ${filterStatus === status ? "text-white" : "text-[#333]"}`}>{config.label}</Text>
+              <Text className="font-semibold text-sm" style={{ color: '#FFFFFF' }}>Tất cả</Text>
             </Pressable>
-          ))}
+          </BlurView>
+          {Object.entries(statusConfig).map(([status, config]) => {
+            const isActive = filterStatus === status;
+            return (
+              <BlurView
+                key={status}
+                intensity={15}
+                tint="light"
+                className="px-5 py-2.5 rounded-3xl overflow-hidden max-h-10"
+                style={{
+                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  flexShrink: 0,
+                }}
+              >
+                <Pressable
+                  onPress={() => setFilterStatus(status as OrderStatus)}
+                  className="w-full h-full items-center justify-center"
+                >
+                  <Text className="font-semibold text-sm" style={{ color: '#FFFFFF' }}>{config.label}</Text>
+                </Pressable>
+              </BlurView>
+            );
+          })}
         </ScrollView>
       </View>
       {/* Orders List */}
@@ -106,8 +200,8 @@ export default function Orders() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 32 }}
         ListEmptyComponent={
-          <View className="py-16 w-full justify-center items-center">
-            <Text className="text-gray-400">Không tìm thấy đơn hàng nào</Text>
+          <View className="py-20 w-full justify-center items-center">
+            <Text className="text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Không tìm thấy đơn hàng</Text>
           </View>
         }
         renderItem={({ item: order }) => {
@@ -116,31 +210,63 @@ export default function Orders() {
           return (
             <Pressable
               key={order.id}
-              className="bg-white mb-3 rounded-xl p-4 shadow-sm border border-[#F1F1F1]"
+              className="mb-4 rounded-3xl overflow-hidden"
               onPress={() => router.push(`/table/${order.table_id}`)}
             >
+              <BlurView
+                intensity={15}
+                tint="light"
+                className="p-5 rounded-3xl"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                {/* Light reflection */}
+                <View
+                  className="absolute top-0 left-0 right-0 h-1/3"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                  }}
+                />
               <View className="flex-row items-start justify-between gap-4">
                 <View className="flex-1">
-                  <View className="flex-row items-center gap-2 mb-1">
-                    <Text className="text-lg font-bold">Bàn {getTableNumber(order.table_id)}</Text>
-                    <View style={{ backgroundColor: config.bg, flexDirection: 'row', alignItems: 'center', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2, marginLeft: 3 }}>
-                      <StatusIcon size={13} color="#fff" style={{ marginRight: 2 }} />
-                      <Text style={{ color: "#fff", fontSize: 12, fontWeight: "bold" }}>{config.label}</Text>
+                  <View className="flex-row items-center gap-3 mb-2">
+                    <Text className="text-xl font-bold" style={{ color: '#FFFFFF' }}>Bàn {getTableNumber(order.table_id)}</Text>
+                    <View 
+                      style={{ 
+                        backgroundColor: config.bg + 'CC',
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        borderRadius: 16, 
+                        paddingHorizontal: 10, 
+                        paddingVertical: 4,
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                      }}
+                    >
+                      <StatusIcon size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 11, fontWeight: "bold" }}>{config.label}</Text>
                     </View>
                   </View>
-                  <Text className="text-sm text-gray-400 mb-1">{formatDate(order.created_at)}</Text>
+                  <Text className="text-sm mb-2" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{formatDate(order.created_at)}</Text>
                   {order.notes ? (
-                    <Text className="text-xs text-[#FF9800] italic">Ghi chú: {order.notes}</Text>
+                    <Text className="text-xs italic" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Ghi chú: {order.notes}</Text>
                   ) : null}
                 </View>
                 <View className="items-end justify-end min-w-[95px]">
-                  <Text className="text-lg font-bold text-[#388E3C]">{formatCurrency(order.total)}</Text>
+                  <Text className="text-xl font-bold" style={{ color: '#FFFFFF' }}>{formatCurrency(order.total)}</Text>
                 </View>
               </View>
+              </BlurView>
             </Pressable>
           );
         }}
       />
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }

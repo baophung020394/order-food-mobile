@@ -1,16 +1,16 @@
 import { MenuSelectionDialog } from "@/components/MenuSelectDialog";
 import { useOrderContext } from "@/context/OrderContext";
 import { useTableContext } from "@/context/TableContext";
+import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeft, Check, Plus, Send } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
+    Pressable,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -143,136 +143,319 @@ export default function TableDetail() {
 
   if (!table) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg">Không tìm thấy bàn</Text>
-      </SafeAreaView>
+      <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+        <SafeAreaView className="flex-1 justify-center items-center">
+          <Text className="text-lg" style={{ color: '#FFFFFF' }}>Không tìm thấy bàn</Text>
+        </SafeAreaView>
+      </View>
     );
   }
   if (order && order.status === "completed") {
     setTimeout(() => router.back(), 300);
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg text-green-600">Đơn hàng đã hoàn thành</Text>
-      </SafeAreaView>
+      <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+        <SafeAreaView className="flex-1 justify-center items-center">
+          <Text className="text-lg" style={{ color: '#FFFFFF' }}>Đơn hàng đã hoàn thành</Text>
+        </SafeAreaView>
+      </View>
     );
   }
   const tableStatus = (table.status as TableStatus) || "available";
   return (
-    <SafeAreaView className="flex-1 bg-zinc-50 pb-10">
-      {/* Header */}
-      <View className="flex-row items-center gap-3 border-b bg-white shadow pb-3 pt-5 px-4 z-10">
-        <Pressable onPress={() => router.back()} className="p-2 mr-2 rounded-full bg-gray-100">
-          <ArrowLeft size={22} color="#333" />
-        </Pressable>
-        <View className="flex-1">
-          <Text className="text-xl font-bold text-zinc-900">Bàn {table.table_number}</Text>
-          <Text className="text-sm text-gray-400">{table.seats} chỗ ngồi - {table.location}</Text>
-        </View>
-        <View className={`rounded-lg px-4 py-1.5 ${statusConfig[tableStatus].className} min-w-[70px] items-center`}>
-          <Text className="text-white text-[13px] font-semibold capitalize">{statusConfig[tableStatus].label}</Text>
-        </View>
-      </View>
-      {/* Main Content */}
-      <ScrollView className="flex-1 px-4 pt-5 pb-24">
-        {!order ? (
-          <View className="bg-white rounded-xl p-8 shadow-sm items-center mt-10">
-            <Text className="text-gray-400 mb-4">Chưa có đơn hàng</Text>
-            <TouchableOpacity className="flex-row items-center bg-green-700 px-5 py-3 rounded-xl" onPress={handleCreateOrder}>
-              <Plus size={18} color="#fff" className="mr-2" />
-              <Text className="text-white font-semibold text-base ml-2">Tạo đơn hàng mới</Text>
-            </TouchableOpacity>
+    <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+      {/* Gradient Background Layers */}
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#9333EA',
+          opacity: 0.5,
+        }}
+      />
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#EC4899',
+          opacity: 0.3,
+        }}
+      />
+      
+      <SafeAreaView className="flex-1 pb-10">
+        {/* Header */}
+        <BlurView
+          intensity={20}
+          tint="light"
+          className="flex-row items-center gap-4 pb-4 pt-5 px-6 rounded-b-3xl z-10 overflow-hidden"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+          }}
+        >
+          {/* Light source highlight */}
+          <View
+            className="absolute top-0 left-0 right-0 h-1/2"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            }}
+          />
+          <Pressable 
+            onPress={() => router.back()} 
+            className="p-2 rounded-2xl"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+            }}
+          >
+            <ArrowLeft size={20} color="#FFFFFF" />
+          </Pressable>
+          <View className="flex-1">
+            <Text className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>Bàn {table.table_number}</Text>
+            <Text className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{table.seats} chỗ ngồi - {table.location}</Text>
           </View>
-        ) : (
-          <View>
-            {/* Order Info */}
-            <View className="bg-white rounded-2xl shadow p-4 mb-6">
-              <View className="flex-row items-center justify-between mb-3">
-                <Text className="font-bold text-base">Đơn hàng #{String(order.id).slice(-6)}</Text>
-                <View className="rounded-full border border-blue-500 px-3 py-0.5 bg-white">
-                  <Text className="text-blue-500 text-sm font-semibold">{order.status}</Text>
-                </View>
-              </View>
-              {!!order.notes && (
-                <View className="bg-blue-50 rounded-lg p-2 mb-3">
-                  <Text className="text-sm"><Text className="font-semibold">Ghi chú:</Text> {order.notes}</Text>
-                </View>
-              )}
-              {order.items?.map((item: any) => {
-                const itemStatus = (item.status as ItemStatus) || 'waiting';
-                return (
-                  <View key={item.id} className="border rounded-xl p-4 mb-3 bg-gray-50">
-                    <View className="flex-row justify-between items-start gap-2 mb-2">
-                      <View className="flex-1">
-                        <Text className="font-semibold text-base">{item.menu_snapshot.name}</Text>
-                        <Text className="text-xs text-gray-500 mt-1">SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
-                        {!!item.note && <Text className="text-xs text-orange-500 mt-1">Ghi chú: {item.note}</Text>}
-                      </View>
-                      <View className={`rounded-lg px-2 py-1 items-center min-w-[60px] ${itemStatusConfig[itemStatus].className}`}>
-                        <Text className="text-white text-xs">{itemStatusConfig[itemStatus].label}</Text>
-                      </View>
-                    </View>
-                    {item.status === "ready" && (
-                      <TouchableOpacity className="flex-row w-full bg-green-600 mt-2 py-2 rounded-xl items-center justify-center" onPress={() => handleMarkServed(item.id)}>
-                        <Check size={16} color="#fff" className="mr-2" />
-                        <Text className="text-white font-medium ml-2">Đánh dấu đã phục vụ</Text>
-                      </TouchableOpacity>
-                    )}
+          <View 
+            className="rounded-2xl px-4 py-2 min-w-[70px] items-center"
+            style={{
+              backgroundColor: statusConfig[tableStatus].className === 'bg-green-500' ? 'rgba(16, 185, 129, 0.3)' :
+                               statusConfig[tableStatus].className === 'bg-orange-500' ? 'rgba(245, 158, 11, 0.3)' :
+                               statusConfig[tableStatus].className === 'bg-blue-500' ? 'rgba(59, 130, 246, 0.3)' :
+                               'rgba(239, 68, 68, 0.3)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+            }}
+          >
+            <Text className="text-xs font-semibold capitalize" style={{ color: '#FFFFFF' }}>{statusConfig[tableStatus].label}</Text>
+          </View>
+        </BlurView>
+        {/* Main Content */}
+        <ScrollView className="flex-1 px-4 pt-6 pb-24">
+          {!order ? (
+            <BlurView
+              intensity={20}
+              tint="light"
+              className="rounded-3xl p-10 items-center mt-10 overflow-hidden"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              {/* Light reflection */}
+              <View
+                className="absolute top-0 left-0 right-0 h-1/3"
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                }}
+              />
+              <Text className="mb-6 text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Chưa có đơn hàng</Text>
+              <TouchableOpacity 
+                className="flex-row items-center px-6 py-3.5 rounded-3xl" 
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.4)',
+                }}
+                onPress={handleCreateOrder}
+              >
+                <Plus size={18} color="#FFFFFF" className="mr-2" />
+                <Text className="font-semibold text-base ml-2" style={{ color: '#FFFFFF' }}>Tạo đơn hàng mới</Text>
+              </TouchableOpacity>
+            </BlurView>
+          ) : (
+            <View>
+              {/* Order Info */}
+              <BlurView
+                intensity={20}
+                tint="light"
+                className="rounded-3xl p-5 mb-6 overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                {/* Light reflection */}
+                <View
+                  className="absolute top-0 left-0 right-0 h-1/4"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                  }}
+                />
+                <View className="flex-row items-center justify-between mb-4">
+                  <Text className="font-bold text-lg" style={{ color: '#FFFFFF' }}>Đơn hàng #{String(order.id).slice(-6)}</Text>
+                  <View 
+                    className="rounded-2xl px-4 py-1.5"
+                    style={{
+                      backgroundColor: 'rgba(59, 130, 246, 0.3)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    }}
+                  >
+                    <Text className="text-xs font-semibold" style={{ color: '#FFFFFF' }}>{order.status}</Text>
                   </View>
-                );
-              })}
-              {/* Order Summary */}
-              <View className="border-t border-gray-200 mt-5 pt-4">
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Tạm tính:</Text>
-                  <Text className="text-base">${Number(order.subtotal).toFixed(2)}</Text>
                 </View>
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Thuế:</Text>
-                  <Text className="text-base">${Number(order.tax).toFixed(2)}</Text>
-                </View>
-                {!!order.discount && order.discount > 0 && (
-                  <View className="flex-row justify-between mb-1">
-                    <Text className="text-base text-green-600">Giảm giá:</Text>
-                    <Text className="text-base text-green-600">-${Number(order.discount).toFixed(2)}</Text>
+                {!!order.notes && (
+                  <View 
+                    className="rounded-2xl p-3 mb-4"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.2)',
+                    }}
+                  >
+                    <Text className="text-sm" style={{ color: '#FFFFFF' }}>
+                      <Text className="font-semibold">Ghi chú:</Text> {order.notes}
+                    </Text>
                   </View>
                 )}
-                <View className="flex-row justify-between mt-1">
-                  <Text className="text-lg font-bold">Tổng cộng:</Text>
-                  <Text className="text-lg font-bold text-green-600">${Number(order.total).toFixed(2)}</Text>
+                {order.items?.map((item: any) => {
+                  const itemStatus = (item.status as ItemStatus) || 'waiting';
+                  return (
+                    <BlurView
+                      key={item.id}
+                      intensity={10}
+                      tint="light"
+                      className="rounded-3xl p-4 mb-3 overflow-hidden"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                      }}
+                    >
+                      <View className="flex-row justify-between items-start gap-3 mb-3">
+                        <View className="flex-1">
+                          <Text className="font-bold text-base" style={{ color: '#FFFFFF' }}>{item.menu_snapshot.name}</Text>
+                          <Text className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
+                          {!!item.note && <Text className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Ghi chú: {item.note}</Text>}
+                        </View>
+                        <View 
+                          className="rounded-2xl px-3 py-1.5 items-center min-w-[60px]"
+                          style={{
+                            backgroundColor: itemStatusConfig[itemStatus].className === 'bg-yellow-400' ? 'rgba(234, 179, 8, 0.3)' :
+                                           itemStatusConfig[itemStatus].className === 'bg-orange-500' ? 'rgba(245, 158, 11, 0.3)' :
+                                           itemStatusConfig[itemStatus].className === 'bg-blue-500' ? 'rgba(59, 130, 246, 0.3)' :
+                                           itemStatusConfig[itemStatus].className === 'bg-green-500' ? 'rgba(16, 185, 129, 0.3)' :
+                                           'rgba(16, 185, 129, 0.3)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                          }}
+                        >
+                          <Text className="text-xs" style={{ color: '#FFFFFF' }}>{itemStatusConfig[itemStatus].label}</Text>
+                        </View>
+                      </View>
+                      {item.status === "ready" && (
+                        <TouchableOpacity 
+                          className="flex-row w-full mt-3 py-3 rounded-2xl items-center justify-center" 
+                          style={{
+                            backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                          }}
+                          onPress={() => handleMarkServed(item.id)}
+                        >
+                          <Check size={16} color="#FFFFFF" className="mr-2" />
+                          <Text className="font-semibold ml-2" style={{ color: '#FFFFFF' }}>Đánh dấu đã phục vụ</Text>
+                        </TouchableOpacity>
+                      )}
+                    </BlurView>
+                  );
+                })}
+                {/* Order Summary */}
+                <View className="mt-6 pt-5" style={{ borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.2)' }}>
+                  <View className="flex-row justify-between mb-2">
+                    <Text className="text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Tạm tính:</Text>
+                    <Text className="text-base font-semibold" style={{ color: '#FFFFFF' }}>${Number(order.subtotal).toFixed(2)}</Text>
+                  </View>
+                  <View className="flex-row justify-between mb-2">
+                    <Text className="text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Thuế:</Text>
+                    <Text className="text-base font-semibold" style={{ color: '#FFFFFF' }}>${Number(order.tax).toFixed(2)}</Text>
+                  </View>
+                  {!!order.discount && order.discount > 0 && (
+                    <View className="flex-row justify-between mb-2">
+                      <Text className="text-base" style={{ color: 'rgba(16, 185, 129, 0.9)' }}>Giảm giá:</Text>
+                      <Text className="text-base font-semibold" style={{ color: 'rgba(16, 185, 129, 0.9)' }}>-${Number(order.discount).toFixed(2)}</Text>
+                    </View>
+                  )}
+                  <View className="flex-row justify-between items-center pt-4 mt-3" style={{ borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.3)' }}>
+                    <Text className="text-xl font-bold" style={{ color: '#FFFFFF' }}>Tổng cộng:</Text>
+                    <Text className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>${Number(order.total).toFixed(2)}</Text>
+                  </View>
                 </View>
-              </View>
+              </BlurView>
             </View>
-          </View>
-        )}
-      </ScrollView>
-      {/* Actions fixed bottom */}
-      <View className="absolute left-0 right-0 bottom-0 p-4 bg-white border-t border-gray-200 flex-row gap-3" style={{shadowColor:'#aaa', shadowOpacity:0.12, elevation:6, paddingBottom: Platform.OS === 'ios' ? 20 : 10}}>
-        {!order ? null : (
-          <>
-            <TouchableOpacity className="flex-1 bg-gray-200 flex-row items-center justify-center rounded-lg py-3" onPress={handleAddItems}>
-              <Plus size={18} color="#222" className="mr-2" />
-              <Text className="ml-2 font-semibold text-base">Thêm món</Text>
+          )}
+          </ScrollView>
+          {/* Bottom Action Bar */}
+          {order && (
+            <BlurView
+              intensity={20}
+              tint="light"
+              className="absolute bottom-0 left-0 right-0 px-6 py-4 flex-row gap-3 rounded-t-3xl overflow-hidden"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                borderTopWidth: 1,
+                borderTopColor: 'rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              {/* Light reflection */}
+              <View
+                className="absolute top-0 left-0 right-0 h-1/2"
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                }}
+              />
+            <TouchableOpacity
+              className="flex-1 rounded-3xl py-3.5 items-center"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+              }}
+              onPress={handleAddItems}
+            >
+              <Text className="font-semibold text-sm" style={{ color: '#FFFFFF' }}>Thêm món</Text>
             </TouchableOpacity>
             {order.status === "draft" && (
-              <TouchableOpacity className="flex-1 bg-blue-500 flex-row items-center justify-center rounded-lg py-3" onPress={handleSendToKitchen}>
-                <Send size={18} color="#fff" className="mr-2" />
-                <Text className="ml-2 font-semibold text-base text-white">Gửi bếp</Text>
+              <TouchableOpacity
+                className="flex-1 rounded-3xl py-3.5 items-center flex-row justify-center"
+                style={{
+                  backgroundColor: 'rgba(59, 130, 246, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+                onPress={handleSendToKitchen}
+              >
+                <Send size={18} color="#FFFFFF" className="mr-2" />
+                <Text className="font-semibold text-sm" style={{ color: '#FFFFFF' }}>Gửi bếp</Text>
               </TouchableOpacity>
             )}
             {order.status === "served" && (
-              <TouchableOpacity className="flex-1 bg-green-600 flex-row items-center justify-center rounded-lg py-3" onPress={handlePayment}>
-                <Check size={18} color="#fff" className="mr-2" />
-                <Text className="ml-2 font-semibold text-base text-white">Thanh toán</Text>
+              <TouchableOpacity
+                className="flex-1 rounded-3xl py-3.5 items-center"
+                style={{
+                  backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+                onPress={handlePayment}
+              >
+                <Text className="font-semibold text-sm" style={{ color: '#FFFFFF' }}>Thanh toán</Text>
               </TouchableOpacity>
             )}
-          </>
-        )}
+          </BlurView>
+          )}
+          <MenuSelectionDialog
+            open={showMenuDialog}
+            onClose={() => setShowMenuDialog(false)}
+            onConfirm={handleMenuSelection}
+          />
+        </SafeAreaView>
       </View>
-      <MenuSelectionDialog
-        open={showMenuDialog}
-        onClose={() => setShowMenuDialog(false)}
-        onConfirm={handleMenuSelection}
-      />
-    </SafeAreaView>
-  );
-}
+    );
+  }

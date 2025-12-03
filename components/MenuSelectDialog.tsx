@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { BlurView } from "expo-blur";
 
 interface MenuItem {
   id: string;
@@ -129,17 +130,62 @@ export function MenuSelectionDialog({
       transparent
       onRequestClose={handleCancel}
     >
-      <View className="flex-1 justify-center items-center bg-black/20">
-        <View className="bg-white rounded-2xl w-[95%] max-h-[92%] flex-1 flex-col">
-          <View className="flex-row flex-1 items-center border-b border-gray-200 px-4 py-3 z-10 min-h-16 max-h-16">
-            <Text className="text-2xl font-bold flex-1 text-zinc-900">
+      <View className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+        {/* Gradient Background Layers */}
+        <View 
+          className="absolute inset-0"
+          style={{
+            backgroundColor: '#3B82F6',
+            opacity: 0.3,
+          }}
+        />
+        <View 
+          className="absolute inset-0"
+          style={{
+            backgroundColor: '#9333EA',
+            opacity: 0.2,
+          }}
+        />
+        
+        <BlurView
+          intensity={25}
+          tint="light"
+          className="rounded-3xl w-[95%] max-h-[92%] flex-1 flex-col overflow-hidden"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.3)',
+          }}
+        >
+          {/* Light source highlight */}
+          <View
+            className="absolute top-0 left-0 right-0 h-1/4 z-0"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+            }}
+          />
+          <View 
+            className="flex-row flex-1 items-center px-6 py-4 z-10 min-h-16 max-h-16 rounded-t-3xl"
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <Text className="text-2xl font-bold flex-1" style={{ color: '#FFFFFF' }}>
               Chọn món
             </Text>
             <TouchableOpacity
               onPress={handleCancel}
-              className="p-2 rounded-full bg-gray-100"
+              className="p-2 rounded-2xl"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+              }}
             >
-              <X size={22} color="#222" />
+              <X size={20} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
 
@@ -147,132 +193,189 @@ export function MenuSelectionDialog({
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="my-2 ml-2 min-h-10 max-h-10"
+            className="my-4 ml-4 min-h-10 max-h-10"
           >
-            {categories.map((cat) => (
-              <TouchableOpacity
-                key={cat}
-                className={
-                  `px-4 py-2 rounded-full border mr-2 ` +
-                  (selectedCategory === cat
-                    ? "bg-green-600 border-green-600"
-                    : "bg-white border-gray-200")
-                }
-                onPress={() => setSelectedCategory(cat)}
-              >
-                <Text
-                  className={
-                    `text-base font-semibold ` +
-                    (selectedCategory === cat ? "text-white" : "text-zinc-900")
-                  }
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat;
+              return (
+                <TouchableOpacity
+                  key={cat}
+                  className="px-5 py-2.5 rounded-3xl mr-2"
+                  style={{
+                    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                  onPress={() => setSelectedCategory(cat)}
                 >
-                  {cat === "all" ? "Tất cả" : getCategoryLabel(cat)}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: '#FFFFFF' }}
+                  >
+                    {cat === "all" ? "Tất cả" : getCategoryLabel(cat)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
 
           {/* Menu grid */}
           <ScrollView className="flex-1">
-            <View className="flex flex-col gap-2 mx-3 my-2">
+            <View className="flex flex-col gap-3 mx-4 my-3">
               {filteredItems.map((item) => {
                 const selectedItem = selectedItems.get(item.id);
                 return (
-                  <View
+                  <BlurView
                     key={item.id}
-                    className="bg-white rounded-xl mb-2 shadow border border-gray-100 min-w-[10px]"
+                    intensity={15}
+                    tint="light"
+                    className="rounded-3xl mb-2 min-w-[10px] overflow-hidden"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    }}
                   >
-                    <View className="p-3">
-                      <View className="flex-row items-center justify-between gap-2 mb-2">
+                    {/* Light reflection */}
+                    <View
+                      className="absolute top-0 left-0 right-0 h-1/4"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                      }}
+                    />
+                    <View className="p-4">
+                      <View className="flex-row items-center justify-between gap-3 mb-3">
                         <View className="flex-1 min-w-0">
                           <Text
-                            className="font-semibold text-lg mb-[1px] text-zinc-900"
+                            className="font-bold text-lg mb-1"
+                            style={{ color: '#FFFFFF' }}
                             numberOfLines={1}
                           >
                             {item.name}
                           </Text>
                           <Text
-                            className="text-sm text-gray-500 mb-1"
+                            className="text-sm mb-2 leading-relaxed"
+                            style={{ color: 'rgba(255, 255, 255, 0.8)' }}
                             numberOfLines={2}
                           >
                             {item.description}
                           </Text>
-                          <View className="flex-row items-center mt-1">
+                          <View className="flex-row items-center mt-2">
                             <View
-                              className={`rounded-full px-3 py-1 ${
-                                categoryColors[item.category] || "bg-gray-200"
-                              } mr-2 items-center`}
+                              className="px-3 py-1 rounded-2xl mr-2 items-center"
+                              style={{
+                                backgroundColor: categoryColors[item.category] === 'bg-green-500' ? 'rgba(16, 185, 129, 0.3)' :
+                                               categoryColors[item.category] === 'bg-orange-500' ? 'rgba(245, 158, 11, 0.3)' :
+                                               categoryColors[item.category] === 'bg-blue-500' ? 'rgba(59, 130, 246, 0.3)' :
+                                               categoryColors[item.category] === 'bg-pink-500' ? 'rgba(236, 72, 153, 0.3)' :
+                                               'rgba(255, 255, 255, 0.2)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              }}
                             >
-                              <Text className="text-xs text-white font-bold">
+                              <Text className="text-xs font-bold" style={{ color: '#FFFFFF' }}>
                                 {getCategoryLabel(item.category)}
                               </Text>
                             </View>
-                            <Text className="text-sm text-gray-400">
+                            <Text className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                               {item.prep_time_minutes} phút
                             </Text>
                           </View>
                         </View>
-                        <Text className="font-bold text-green-600 text-lg ml-2">
+                        <Text className="font-bold text-lg ml-2" style={{ color: '#FFFFFF' }}>
                           {item.price.toLocaleString("vi-VN")}₫
                         </Text>
                       </View>
-                      <View className="flex-row items-center gap-2 mt-2">
+                      <View className="flex-row items-center gap-2 mt-3 pt-3" style={{ borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.2)' }}>
                         {selectedItem ? (
                           <>
                             <TouchableOpacity
-                              className="bg-gray-100 rounded-md p-2 min-w-[32px] items-center justify-center"
+                              className="rounded-2xl p-2 min-w-[36px] items-center justify-center"
+                              style={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              }}
                               onPress={() => handleRemoveItem(item.id)}
                             >
-                              <Minus size={18} color="#333" />
+                              <Minus size={18} color="#FFFFFF" />
                             </TouchableOpacity>
-                            <Text className="font-semibold text-base text-zinc-900 min-w-[30px] text-center">
+                            <Text className="font-bold text-lg min-w-[30px] text-center" style={{ color: '#FFFFFF' }}>
                               {selectedItem.quantity}
                             </Text>
                             <TouchableOpacity
-                              className="bg-gray-100 rounded-md p-2 min-w-[32px] items-center justify-center"
+                              className="rounded-2xl p-2 min-w-[36px] items-center justify-center"
+                              style={{
+                                backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                              }}
                               onPress={() => handleAddItem(item)}
                             >
-                              <Plus size={18} color="#333" />
+                              <Plus size={18} color="#FFFFFF" />
                             </TouchableOpacity>
                           </>
                         ) : (
                           <TouchableOpacity
-                            className="bg-green-600 rounded-lg flex-row items-center justify-center py-2 mt-1 flex-1"
+                            className="rounded-3xl flex-row items-center justify-center py-2.5 mt-1 flex-1"
+                            style={{
+                              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                              borderWidth: 1,
+                              borderColor: 'rgba(255, 255, 255, 0.3)',
+                            }}
                             onPress={() => handleAddItem(item)}
                           >
                             <Plus
                               size={17}
-                              color="#fff"
+                              color="#FFFFFF"
                               style={{ marginRight: 4 }}
                             />
-                            <Text className="text-white font-bold ml-2">
+                            <Text className="font-bold ml-2 text-sm" style={{ color: '#FFFFFF' }}>
                               Thêm
                             </Text>
                           </TouchableOpacity>
                         )}
                       </View>
                     </View>
-                  </View>
+                  </BlurView>
                 );
               })}
             </View>
 
             {/* Selected Items */}
             {selectedItems.size > 0 && (
-              <View className="mt-4 px-2 border-t border-gray-200 bg-zinc-50 rounded-xl mb-4 py-2">
-                <Text className="font-bold text-lg mb-2 text-zinc-900">
+              <BlurView
+                intensity={15}
+                tint="light"
+                className="mt-4 px-4 rounded-3xl mb-4 py-4 overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderTopWidth: 1,
+                  borderTopColor: 'rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <Text className="font-bold text-lg mb-3" style={{ color: '#FFFFFF' }}>
                   Món đã chọn ({selectedItems.size})
                 </Text>
                 {Array.from(selectedItems.values()).map((item) => (
-                  <View
+                  <BlurView
                     key={item.menu_item.id}
-                    className="bg-white rounded-lg my-2 p-2 border border-gray-200"
+                    intensity={10}
+                    tint="light"
+                    className="rounded-3xl my-2 p-3 overflow-hidden"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    }}
                   >
-                    <View className="flex-row items-center justify-between mb-1">
-                      <Text className="font-medium text-base text-zinc-900 flex-1">
+                    <View className="flex-row items-center justify-between mb-2">
+                      <Text className="font-semibold text-base flex-1" style={{ color: '#FFFFFF' }}>
                         {item.menu_item.name}
                       </Text>
-                      <Text className="text-sm text-gray-500">
+                      <Text className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                         {item.quantity} ×{" "}
                         {item.menu_item.price.toLocaleString("vi-VN")}₫ ={" "}
                         {(item.quantity * item.menu_item.price).toLocaleString(
@@ -281,59 +384,90 @@ export function MenuSelectionDialog({
                         ₫
                       </Text>
                     </View>
-                    <TextInput
-                      value={item.note}
-                      placeholder="Ghi chú đặc biệt..."
-                      onChangeText={(txt) =>
-                        handleNoteChange(item.menu_item.id, txt)
-                      }
-                      className={`bg-gray-50 rounded-md border border-gray-200 px-3 py-2 text-sm text-zinc-900 mt-1 min-h-[32px]`}
-                      multiline
-                      numberOfLines={2}
-                      placeholderTextColor="#888"
-                    />
-                  </View>
+                    <BlurView
+                      intensity={5}
+                      tint="light"
+                      className="rounded-2xl px-3 py-2 mt-2 min-h-[36px] overflow-hidden"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                      }}
+                    >
+                      <TextInput
+                        value={item.note}
+                        placeholder="Ghi chú đặc biệt..."
+                        onChangeText={(txt) =>
+                          handleNoteChange(item.menu_item.id, txt)
+                        }
+                        className="text-sm"
+                        style={{
+                          color: '#FFFFFF',
+                        }}
+                        multiline
+                        numberOfLines={2}
+                        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                      />
+                    </BlurView>
+                  </BlurView>
                 ))}
-              </View>
+              </BlurView>
             )}
           </ScrollView>
 
           {/* Footer */}
-          <View className="border-t border-gray-100 bg-zinc-50 px-4 pt-3 pb-5">
-            <View className="flex-row justify-between items-center mb-3">
-              <Text className="font-bold text-base text-zinc-900">
+          <BlurView
+            intensity={20}
+            tint="light"
+            className="px-6 pt-4 pb-6 rounded-b-3xl overflow-hidden"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderTopWidth: 1,
+              borderTopColor: 'rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="font-bold text-base" style={{ color: '#FFFFFF' }}>
                 Tổng tạm tính:
               </Text>
-              <Text className="font-bold text-lg text-green-600">
+              <Text className="font-bold text-xl" style={{ color: '#FFFFFF' }}>
                 {totalAmount.toLocaleString("vi-VN")}₫
               </Text>
             </View>
-            <View className="flex-row gap-2">
+            <View className="flex-row gap-3">
               <TouchableOpacity
-                className="flex-1 rounded-lg py-3 bg-gray-200 items-center justify-center"
+                className="flex-1 rounded-3xl py-3.5 items-center justify-center"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
                 onPress={handleCancel}
               >
-                <Text className="font-bold text-base text-zinc-800">Hủy</Text>
+                <Text className="font-bold text-sm" style={{ color: '#FFFFFF' }}>Hủy</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-1 rounded-lg py-3 flex-row items-center justify-center ${
-                  selectedItems.size === 0 ? "bg-gray-300" : "bg-green-600"
-                }`}
+                className="flex-1 rounded-3xl py-3.5 flex-row items-center justify-center"
+                style={{
+                  backgroundColor: selectedItems.size === 0 ? 'rgba(255, 255, 255, 0.1)' : 'rgba(16, 185, 129, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
                 onPress={handleConfirm}
                 disabled={selectedItems.size === 0}
               >
                 <ShoppingCart
                   size={17}
-                  color="#fff"
+                  color="#FFFFFF"
                   style={{ marginRight: 4 }}
                 />
-                <Text className="font-bold text-base text-white ml-1">
+                <Text className="font-bold text-sm ml-1" style={{ color: '#FFFFFF' }}>
                   Xác nhận ({selectedItems.size})
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
-        </View>
+          </BlurView>
+        </BlurView>
       </View>
     </Modal>
   );

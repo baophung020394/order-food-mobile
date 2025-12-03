@@ -13,6 +13,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { BlurView } from "expo-blur";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from 'react-native-toast-message';
 
@@ -92,88 +93,195 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 h-full w-full">
-      <ScrollView className="flex-1 bg-gradient-to-br from-[#388E3C]/10 via-[#fff] to-[#E0E0E0]/10 p-4">
-        <KeyboardAvoidingView
-          className="flex-1 justify-center items-center"
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-        >
-          <View className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6">
-            <View className="items-center mb-6">
-              <View className="bg-[#388E3C] w-16 h-16 rounded-full items-center justify-center mb-2">
-                <ChefHat color="#fff" size={32} />
-              </View>
-              <Text className="text-3xl font-bold mb-1 text-center">
-                Restaurant POS
-              </Text>
-              <Text className="text-base text-gray-600 text-center mb-2">
-                Đăng nhập vào hệ thống quản lý nhà hàng
-              </Text>
-            </View>
-
-            {/* Form */}
-            <View className="mb-4">
-              <Text className="font-medium mb-1">Tên đăng nhập</Text>
-              <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 mb-2 text-base"
-                placeholder="Nhập tên đăng nhập"
-                value={username}
-                onChangeText={setUsername}
-                editable={!loading}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <Text className="font-medium mb-1">Mật khẩu</Text>
-              <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 text-base"
-                placeholder="Nhập mật khẩu"
-                value={password}
-                onChangeText={setPassword}
-                editable={!loading}
-                secureTextEntry
-              />
-            </View>
-            <Pressable
-              className={`w-full rounded-xl bg-[#388E3C] h-12 flex-row items-center justify-center mt-2 ${loading ? "opacity-60" : ""}`}
-              onPress={handleLogin}
-              disabled={loading}
+    <View className="flex-1" style={{ backgroundColor: '#3B82F6' }}>
+      {/* Gradient Background Layers */}
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#9333EA',
+          opacity: 0.5,
+        }}
+      />
+      <View 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#EC4899',
+          opacity: 0.3,
+        }}
+      />
+      
+      <SafeAreaView className="flex-1 h-full w-full">
+        <ScrollView className="flex-1 p-6">
+          <KeyboardAvoidingView
+            className="flex-1 justify-center items-center"
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+          >
+            <BlurView
+              intensity={20}
+              tint="light"
+              className="w-full max-w-md mx-auto rounded-3xl p-8 overflow-hidden"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+              }}
             >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text className="text-white font-semibold text-base">
-                  Đăng nhập
+              {/* Light source highlight */}
+              <View
+                className="absolute top-0 left-0 right-0 h-1/3"
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                }}
+              />
+              <View className="items-center mb-8">
+                <View 
+                  className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <ChefHat color="#FFFFFF" size={36} />
+                </View>
+                <Text className="text-3xl font-bold mb-2 text-center" style={{ color: '#FFFFFF' }}>
+                  Restaurant POS
                 </Text>
-              )}
-            </Pressable>
-
-            {/* Demo Accounts */}
-            <View className="mt-6 p-4 bg-[#F5F5F5] rounded-lg border border-[#E0E0E0]">
-              <Text className="font-semibold mb-2 text-[#222]">
-                Tài khoản demo (nhấn để điền):
-              </Text>
-              <View className="gap-2">
-                {demoAccounts.map((acc, i) => (
-                  <Pressable
-                    key={i}
-                    onPress={() => fillDemoAccount(acc)}
-                    disabled={loading}
-                    className="bg-white rounded-lg p-2 border border-[#E0E0E0]"
-                  >
-                    <View className="flex-row justify-between items-center">
-                      <Text className="text-[#666] text-sm font-medium">{acc.username}</Text>
-                      <Text className="text-[#888] text-xs">
-                        {acc.password}
-                      </Text>
-                    </View>
-                  </Pressable>
-                ))}
+                <Text className="text-sm text-center" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                  Đăng nhập vào hệ thống quản lý nhà hàng
+                </Text>
               </View>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
-    </SafeAreaView>
+
+              {/* Form */}
+              <View className="mb-6">
+                <Text className="font-semibold mb-2 text-sm" style={{ color: '#FFFFFF' }}>Tên đăng nhập</Text>
+                <BlurView
+                  intensity={10}
+                  tint="light"
+                  className="rounded-3xl overflow-hidden mb-4"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <TextInput
+                    className="px-4 h-12 text-base"
+                    style={{
+                      color: '#FFFFFF',
+                    }}
+                    placeholder="Nhập tên đăng nhập"
+                    placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                    value={username}
+                    onChangeText={setUsername}
+                    editable={!loading}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </BlurView>
+                <Text className="font-semibold mb-2 text-sm" style={{ color: '#FFFFFF' }}>Mật khẩu</Text>
+                <BlurView
+                  intensity={10}
+                  tint="light"
+                  className="rounded-3xl overflow-hidden"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <TextInput
+                    className="px-4 h-12 text-base"
+                    style={{
+                      color: '#FFFFFF',
+                    }}
+                    placeholder="Nhập mật khẩu"
+                    placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                    value={password}
+                    onChangeText={setPassword}
+                    editable={!loading}
+                    secureTextEntry
+                  />
+                </BlurView>
+              </View>
+              <BlurView
+                intensity={15}
+                tint="light"
+                className={`w-full rounded-3xl h-12 overflow-hidden ${loading ? "opacity-60" : ""}`}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.4)',
+                }}
+              >
+                {/* Light reflection */}
+                <View
+                  className="absolute top-0 left-0 right-0 h-1/2"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                  }}
+                />
+                <Pressable
+                  className="w-full h-full flex-row items-center justify-center"
+                  onPress={handleLogin}
+                  disabled={loading}
+                >
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text className="font-semibold text-base" style={{ color: '#FFFFFF' }}>
+                    Đăng nhập
+                  </Text>
+                )}
+                </Pressable>
+              </BlurView>
+
+              {/* Demo Accounts */}
+              <BlurView
+                intensity={10}
+                tint="light"
+                className="mt-8 p-5 rounded-3xl overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <Text className="font-semibold mb-4 text-sm" style={{ color: '#FFFFFF' }}>
+                  Tài khoản demo (nhấn để điền):
+                </Text>
+                <View className="gap-3">
+                  {demoAccounts.map((acc, i) => (
+                    <Pressable
+                      key={i}
+                      onPress={() => fillDemoAccount(acc)}
+                      disabled={loading}
+                      className="rounded-2xl p-3"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                      }}
+                    >
+                      <View className="flex-row justify-between items-center">
+                        <Text className="text-sm font-semibold" style={{ color: '#FFFFFF' }}>{acc.username}</Text>
+                        <Text className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                          {acc.password}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  ))}
+                </View>
+              </BlurView>
+            </BlurView>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 };
 
