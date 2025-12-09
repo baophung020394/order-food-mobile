@@ -143,41 +143,84 @@ export default function TableDetail() {
 
   if (!table) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg">Không tìm thấy bàn</Text>
+      <SafeAreaView className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
+        <Text className="text-lg" style={{ color: '#1e293b' }}>Không tìm thấy bàn</Text>
       </SafeAreaView>
     );
   }
   if (order && order.status === "completed") {
     setTimeout(() => router.back(), 300);
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-lg text-green-600">Đơn hàng đã hoàn thành</Text>
+      <SafeAreaView className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
+        <Text className="text-lg" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>Đơn hàng đã hoàn thành</Text>
       </SafeAreaView>
     );
   }
   const tableStatus = (table.status as TableStatus) || "available";
   return (
-    <SafeAreaView className="flex-1 bg-zinc-50 pb-10">
+    <SafeAreaView className="flex-1 pb-10" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
       {/* Header */}
-      <View className="flex-row items-center gap-3 border-b bg-white shadow pb-3 pt-5 px-4 z-10">
-        <Pressable onPress={() => router.back()} className="p-2 mr-2 rounded-full bg-gray-100">
-          <ArrowLeft size={22} color="#333" />
+      <View 
+        className="flex-row items-center gap-3 pb-3 pt-5 px-4 z-10"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.25)',
+          borderBottomWidth: 1,
+          borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 3,
+        }}
+      >
+        <Pressable 
+          onPress={() => router.back()} 
+          className="p-2 mr-2 rounded-full"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+          }}
+        >
+          <ArrowLeft size={22} color="#1e293b" />
         </Pressable>
         <View className="flex-1">
-          <Text className="text-xl font-bold text-zinc-900">Bàn {table.table_number}</Text>
-          <Text className="text-sm text-gray-400">{table.seats} chỗ ngồi - {table.location}</Text>
+          <Text className="text-xl font-bold" style={{ color: '#1e293b' }}>Bàn {table.table_number}</Text>
+          <Text className="text-sm" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>{table.seats} chỗ ngồi - {table.location}</Text>
         </View>
-        <View className={`rounded-lg px-4 py-1.5 ${statusConfig[tableStatus].className} min-w-[70px] items-center`}>
+        <View 
+          className={`rounded-lg px-4 py-1.5 min-w-[70px] items-center ${statusConfig[tableStatus].className}`}
+          style={{ borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}
+        >
           <Text className="text-white text-[13px] font-semibold capitalize">{statusConfig[tableStatus].label}</Text>
         </View>
       </View>
       {/* Main Content */}
       <ScrollView className="flex-1 px-4 pt-5 pb-24">
         {!order ? (
-          <View className="bg-white rounded-xl p-8 shadow-sm items-center mt-10">
-            <Text className="text-gray-400 mb-4">Chưa có đơn hàng</Text>
-            <TouchableOpacity className="flex-row items-center bg-green-700 px-5 py-3 rounded-xl" onPress={handleCreateOrder}>
+          <View 
+            className="rounded-xl p-8 items-center mt-10"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.25)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.4)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 12,
+              elevation: 5,
+            }}
+          >
+            <Text className="mb-4" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>Chưa có đơn hàng</Text>
+            <TouchableOpacity 
+              className="flex-row items-center px-5 py-3 rounded-xl" 
+              style={{
+                backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+              }}
+              onPress={handleCreateOrder}
+            >
               <Plus size={18} color="#fff" className="mr-2" />
               <Text className="text-white font-semibold text-base ml-2">Tạo đơn hàng mới</Text>
             </TouchableOpacity>
@@ -185,34 +228,79 @@ export default function TableDetail() {
         ) : (
           <View>
             {/* Order Info */}
-            <View className="bg-white rounded-2xl shadow p-4 mb-6">
+            <View 
+              className="rounded-2xl p-4 mb-6"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.4)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 12,
+                elevation: 5,
+              }}
+            >
               <View className="flex-row items-center justify-between mb-3">
-                <Text className="font-bold text-base">Đơn hàng #{String(order.id).slice(-6)}</Text>
-                <View className="rounded-full border border-blue-500 px-3 py-0.5 bg-white">
-                  <Text className="text-blue-500 text-sm font-semibold">{order.status}</Text>
+                <Text className="font-bold text-base" style={{ color: '#1e293b' }}>Đơn hàng #{String(order.id).slice(-6)}</Text>
+                <View 
+                  className="rounded-full px-3 py-0.5"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(59, 130, 246, 0.6)',
+                  }}
+                >
+                  <Text className="text-sm font-semibold" style={{ color: 'rgba(59, 130, 246, 0.9)' }}>{order.status}</Text>
                 </View>
               </View>
               {!!order.notes && (
-                <View className="bg-blue-50 rounded-lg p-2 mb-3">
-                  <Text className="text-sm"><Text className="font-semibold">Ghi chú:</Text> {order.notes}</Text>
+                <View 
+                  className="rounded-lg p-2 mb-3"
+                  style={{
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  }}
+                >
+                  <Text className="text-sm" style={{ color: '#1e293b' }}><Text className="font-semibold">Ghi chú:</Text> {order.notes}</Text>
                 </View>
               )}
               {order.items?.map((item: any) => {
                 const itemStatus = (item.status as ItemStatus) || 'waiting';
                 return (
-                  <View key={item.id} className="border rounded-xl p-4 mb-3 bg-gray-50">
+                  <View 
+                    key={item.id} 
+                    className="rounded-xl p-4 mb-3"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.4)',
+                    }}
+                  >
                     <View className="flex-row justify-between items-start gap-2 mb-2">
                       <View className="flex-1">
-                        <Text className="font-semibold text-base">{item.menu_snapshot.name}</Text>
-                        <Text className="text-xs text-gray-500 mt-1">SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
-                        {!!item.note && <Text className="text-xs text-orange-500 mt-1">Ghi chú: {item.note}</Text>}
+                        <Text className="font-semibold text-base" style={{ color: '#1e293b' }}>{item.menu_snapshot.name}</Text>
+                        <Text className="text-xs mt-1" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>SL: {item.quantity} × ${Number(item.unit_price).toFixed(2)}</Text>
+                        {!!item.note && <Text className="text-xs mt-1" style={{ color: 'rgba(251, 146, 60, 0.9)' }}>Ghi chú: {item.note}</Text>}
                       </View>
-                      <View className={`rounded-lg px-2 py-1 items-center min-w-[60px] ${itemStatusConfig[itemStatus].className}`}>
+                      <View 
+                        className={`rounded-lg px-2 py-1 items-center min-w-[60px] ${itemStatusConfig[itemStatus].className}`}
+                        style={{ borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}
+                      >
                         <Text className="text-white text-xs">{itemStatusConfig[itemStatus].label}</Text>
                       </View>
                     </View>
                     {item.status === "ready" && (
-                      <TouchableOpacity className="flex-row w-full bg-green-600 mt-2 py-2 rounded-xl items-center justify-center" onPress={() => handleMarkServed(item.id)}>
+                      <TouchableOpacity 
+                        className="flex-row w-full mt-2 py-2 rounded-xl items-center justify-center" 
+                        style={{
+                          backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.5)',
+                        }}
+                        onPress={() => handleMarkServed(item.id)}
+                      >
                         <Check size={16} color="#fff" className="mr-2" />
                         <Text className="text-white font-medium ml-2">Đánh dấu đã phục vụ</Text>
                       </TouchableOpacity>
@@ -221,24 +309,24 @@ export default function TableDetail() {
                 );
               })}
               {/* Order Summary */}
-              <View className="border-t border-gray-200 mt-5 pt-4">
+              <View className="mt-5 pt-4" style={{ borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.3)' }}>
                 <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Tạm tính:</Text>
-                  <Text className="text-base">${Number(order.subtotal).toFixed(2)}</Text>
+                  <Text className="text-base" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>Tạm tính:</Text>
+                  <Text className="text-base" style={{ color: '#1e293b' }}>${Number(order.subtotal).toFixed(2)}</Text>
                 </View>
                 <View className="flex-row justify-between mb-1">
-                  <Text className="text-base text-gray-600">Thuế:</Text>
-                  <Text className="text-base">${Number(order.tax).toFixed(2)}</Text>
+                  <Text className="text-base" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>Thuế:</Text>
+                  <Text className="text-base" style={{ color: '#1e293b' }}>${Number(order.tax).toFixed(2)}</Text>
                 </View>
                 {!!order.discount && order.discount > 0 && (
                   <View className="flex-row justify-between mb-1">
-                    <Text className="text-base text-green-600">Giảm giá:</Text>
-                    <Text className="text-base text-green-600">-${Number(order.discount).toFixed(2)}</Text>
+                    <Text className="text-base" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>Giảm giá:</Text>
+                    <Text className="text-base" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>-${Number(order.discount).toFixed(2)}</Text>
                   </View>
                 )}
                 <View className="flex-row justify-between mt-1">
-                  <Text className="text-lg font-bold">Tổng cộng:</Text>
-                  <Text className="text-lg font-bold text-green-600">${Number(order.total).toFixed(2)}</Text>
+                  <Text className="text-lg font-bold" style={{ color: '#1e293b' }}>Tổng cộng:</Text>
+                  <Text className="text-lg font-bold" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>${Number(order.total).toFixed(2)}</Text>
                 </View>
               </View>
             </View>
@@ -246,21 +334,58 @@ export default function TableDetail() {
         )}
       </ScrollView>
       {/* Actions fixed bottom */}
-      <View className="absolute left-0 right-0 bottom-0 p-4 bg-white border-t border-gray-200 flex-row gap-3" style={{shadowColor:'#aaa', shadowOpacity:0.12, elevation:6, paddingBottom: Platform.OS === 'ios' ? 20 : 10}}>
+      <View 
+        className="absolute left-0 right-0 bottom-0 p-4 flex-row gap-3"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.25)',
+          borderTopWidth: 1,
+          borderTopColor: 'rgba(255, 255, 255, 0.3)',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: 8,
+          paddingBottom: Platform.OS === 'ios' ? 20 : 10
+        }}
+      >
         {!order ? null : (
           <>
-            <TouchableOpacity className="flex-1 bg-gray-200 flex-row items-center justify-center rounded-lg py-3" onPress={handleAddItems}>
-              <Plus size={18} color="#222" className="mr-2" />
-              <Text className="ml-2 font-semibold text-base">Thêm món</Text>
+            <TouchableOpacity 
+              className="flex-1 flex-row items-center justify-center rounded-lg py-3" 
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+              }}
+              onPress={handleAddItems}
+            >
+              <Plus size={18} color="#1e293b" className="mr-2" />
+              <Text className="ml-2 font-semibold text-base" style={{ color: '#1e293b' }}>Thêm món</Text>
             </TouchableOpacity>
             {order.status === "draft" && (
-              <TouchableOpacity className="flex-1 bg-blue-500 flex-row items-center justify-center rounded-lg py-3" onPress={handleSendToKitchen}>
+              <TouchableOpacity 
+                className="flex-1 flex-row items-center justify-center rounded-lg py-3" 
+                style={{
+                  backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
+                onPress={handleSendToKitchen}
+              >
                 <Send size={18} color="#fff" className="mr-2" />
                 <Text className="ml-2 font-semibold text-base text-white">Gửi bếp</Text>
               </TouchableOpacity>
             )}
             {order.status === "served" && (
-              <TouchableOpacity className="flex-1 bg-green-600 flex-row items-center justify-center rounded-lg py-3" onPress={handlePayment}>
+              <TouchableOpacity 
+                className="flex-1 flex-row items-center justify-center rounded-lg py-3" 
+                style={{
+                  backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
+                onPress={handlePayment}
+              >
                 <Check size={18} color="#fff" className="mr-2" />
                 <Text className="ml-2 font-semibold text-base text-white">Thanh toán</Text>
               </TouchableOpacity>

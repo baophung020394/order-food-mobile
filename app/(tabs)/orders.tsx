@@ -54,29 +54,56 @@ export default function Orders() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
       {/* Header */}
-      <View className="bg-white border-b shadow-sm px-4 py-4 flex-row items-center gap-3">
+      <View 
+        className="px-4 py-4 flex-row items-center gap-3"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.25)',
+          borderBottomWidth: 1,
+          borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 3,
+        }}
+      >
         <Pressable
-          className="rounded-full bg-gray-100 p-1 mr-2"
+          className="rounded-full p-1 mr-2"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+          }}
           onPress={() => router.back()}
         >
-          <ArrowLeft size={22} color="#222" />
+          <ArrowLeft size={22} color="#1e293b" />
         </Pressable>
-        <Text className="text-xl font-bold">Danh sách đơn hàng</Text>
+        <Text className="text-xl font-bold" style={{ color: '#1e293b' }}>Danh sách đơn hàng</Text>
       </View>
       {/* Search & Filter */}
-      <View className="px-4 py-3 bg-[#F8F8F8]">
+      <View className="px-4 py-3">
         <View className="relative mb-2">
           <Search
             size={18}
-            color="#999"
-            style={{ position: "absolute", left: 14, top: 13 }}
+            color="rgba(30, 41, 59, 0.6)"
+            style={{ position: "absolute", left: 14, top: 13, zIndex: 1 }}
           />
           <TextInput
-            className="h-11 bg-white pl-10 pr-3 rounded-lg border border-[#E0E0E0] text-[15px]"
+            className="h-11 pl-10 pr-3 rounded-lg text-[15px]"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
             placeholder="Tìm theo số bàn..."
-            placeholderTextColor="#aaa"
+            placeholderTextColor="rgba(30, 41, 59, 0.5)"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -84,17 +111,35 @@ export default function Orders() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2 mt-2 pb-1">
           <Pressable
             onPress={() => setFilterStatus("all")}
-            className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === "all" ? "bg-[#4CAF50] border-[#4CAF50]" : "bg-white border-[#E0E0E0]"}`}
+            className="px-4 py-2 rounded-full border mr-2"
+            style={filterStatus === "all" ? {
+              backgroundColor: 'rgba(34, 197, 94, 0.4)',
+              borderColor: 'rgba(255, 255, 255, 0.6)',
+              borderWidth: 1,
+            } : {
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              borderWidth: 1,
+            }}
           >
-            <Text className={`font-semibold ${filterStatus === "all" ? "text-white" : "text-[#333]"}`}>Tất cả</Text>
+            <Text className="font-semibold" style={{ color: filterStatus === "all" ? "#fff" : "#1e293b" }}>Tất cả</Text>
           </Pressable>
           {Object.entries(statusConfig).map(([status, config]) => (
             <Pressable
               key={status}
               onPress={() => setFilterStatus(status as OrderStatus)}
-              className={`px-4 py-2 rounded-full border mr-2 ${filterStatus === status ? `bg-[${config.bg}] border-[${config.bg}]` : "bg-white border-[#E0E0E0]"}`}
+              className="px-4 py-2 rounded-full border mr-2"
+              style={filterStatus === status ? {
+                backgroundColor: config.bg + 'CC',
+                borderColor: 'rgba(255, 255, 255, 0.6)',
+                borderWidth: 1,
+              } : {
+                backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderWidth: 1,
+              }}
             >
-              <Text className={`font-semibold ${filterStatus === status ? "text-white" : "text-[#333]"}`}>{config.label}</Text>
+              <Text className="font-semibold" style={{ color: filterStatus === status ? "#fff" : "#1e293b" }}>{config.label}</Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -107,7 +152,7 @@ export default function Orders() {
         contentContainerStyle={{ paddingBottom: 32 }}
         ListEmptyComponent={
           <View className="py-16 w-full justify-center items-center">
-            <Text className="text-gray-400">Không tìm thấy đơn hàng nào</Text>
+            <Text style={{ color: 'rgba(30, 41, 59, 0.6)' }}>Không tìm thấy đơn hàng nào</Text>
           </View>
         }
         renderItem={({ item: order }) => {
@@ -116,25 +161,35 @@ export default function Orders() {
           return (
             <Pressable
               key={order.id}
-              className="bg-white mb-3 rounded-xl p-4 shadow-sm border border-[#F1F1F1]"
+              className="mb-3 rounded-xl p-4"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.4)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 12,
+                elevation: 5,
+              }}
               onPress={() => router.push(`/table/${order.table_id}`)}
             >
               <View className="flex-row items-start justify-between gap-4">
                 <View className="flex-1">
                   <View className="flex-row items-center gap-2 mb-1">
-                    <Text className="text-lg font-bold">Bàn {getTableNumber(order.table_id)}</Text>
-                    <View style={{ backgroundColor: config.bg, flexDirection: 'row', alignItems: 'center', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2, marginLeft: 3 }}>
+                    <Text className="text-lg font-bold" style={{ color: '#1e293b' }}>Bàn {getTableNumber(order.table_id)}</Text>
+                    <View style={{ backgroundColor: config.bg + 'CC', flexDirection: 'row', alignItems: 'center', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2, marginLeft: 3, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}>
                       <StatusIcon size={13} color="#fff" style={{ marginRight: 2 }} />
                       <Text style={{ color: "#fff", fontSize: 12, fontWeight: "bold" }}>{config.label}</Text>
                     </View>
                   </View>
-                  <Text className="text-sm text-gray-400 mb-1">{formatDate(order.created_at)}</Text>
+                  <Text className="text-sm mb-1" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>{formatDate(order.created_at)}</Text>
                   {order.notes ? (
-                    <Text className="text-xs text-[#FF9800] italic">Ghi chú: {order.notes}</Text>
+                    <Text className="text-xs italic" style={{ color: 'rgba(251, 146, 60, 0.9)' }}>Ghi chú: {order.notes}</Text>
                   ) : null}
                 </View>
                 <View className="items-end justify-end min-w-[95px]">
-                  <Text className="text-lg font-bold text-[#388E3C]">{formatCurrency(order.total)}</Text>
+                  <Text className="text-lg font-bold" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>{formatCurrency(order.total)}</Text>
                 </View>
               </View>
             </Pressable>

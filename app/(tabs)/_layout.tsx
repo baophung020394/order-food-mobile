@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 const TabIcon = ({ focused, iconName, title }: any) => {
   const iconProps = {
     size: focused ? 27 : 21,
-    color: focused ? "#fff" : "#bbb",
+    color: focused ? "#1e293b" : "rgba(30, 41, 59, 0.6)",
   };
   const Icon =
     iconName === "Table"
@@ -20,7 +20,7 @@ const TabIcon = ({ focused, iconName, title }: any) => {
     <View className="flex flex-row items-center justify-center w-56">
       {Icon ? <Icon {...iconProps} /> : null}
       {focused && (
-        <Text className="text-white text-base font-semibold ml-2">{title}</Text>
+        <Text className="text-base font-semibold ml-2" style={{ color: '#1e293b' }}>{title}</Text>
       )}
     </View>
   );
@@ -32,19 +32,22 @@ const _Layout = () => {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#181828",
+          backgroundColor: "rgba(255, 255, 255, 0.25)",
           borderRadius: 30,
           marginHorizontal: 14,
-          marginBottom: 16, // Giảm để lên cao giữa sát vùng safe
-          height: 66, // cao hơn mặc định
-          paddingTop: 8, // ĐỦ rộng, icon + label ở giữa hoàn hảo
+          marginBottom: 16,
+          height: 66,
+          paddingTop: 8,
           paddingBottom: 10,
           position: "absolute",
-          shadowColor: "#0e152b",
-          shadowOpacity: 0.16,
-          shadowRadius: 10,
-          elevation: 10,
           borderTopWidth: 0,
+          borderWidth: 1,
+          borderColor: "rgba(255, 255, 255, 0.4)",
+          shadowColor: "#000",
+          shadowOpacity: 0.2,
+          shadowRadius: 15,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 10,
         },
         tabBarItemStyle: {
           alignItems: "center",

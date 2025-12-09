@@ -115,23 +115,45 @@ const MenuScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
       <View className="flex-1">
         {/* Header */}
-        <View className="border-b bg-white px-4 py-4 flex-row items-center justify-between shadow-sm">
+        <View 
+          className="px-4 py-4 flex-row items-center justify-between"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
           <View className="flex-row items-center gap-3">
             <TouchableOpacity
-              className="rounded-full bg-gray-100 mr-2 p-2"
+              className="rounded-full mr-2 p-2"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+              }}
               onPress={() => router.back()}
             >
-              <ArrowLeft size={22} color="#222" />
+              <ArrowLeft size={22} color="#1e293b" />
             </TouchableOpacity>
-            <Text className="text-xl font-bold text-[#18181b]">
+            <Text className="text-xl font-bold" style={{ color: '#1e293b' }}>
               Quản lý thực đơn
             </Text>
           </View>
           <TouchableOpacity
-            className="bg-green-700 flex-row items-center rounded-lg px-3 py-2"
+            className="flex-row items-center rounded-lg px-3 py-2"
+            style={{
+              backgroundColor: 'rgba(34, 197, 94, 0.5)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+            }}
             onPress={handleAdd}
           >
             <Plus size={17} color="#fff" className="mr-2" />
@@ -143,29 +165,43 @@ const MenuScreen = () => {
           <View className="px-4 py-4">
             <View className="relative mb-3">
               <View className="absolute top-0 bottom-0 left-3 justify-center flex-col h-full z-10">
-                <Search size={20} color="#aaa" />
+                <Search size={20} color="rgba(30, 41, 59, 0.6)" />
               </View>
               <TextInput
-                className="bg-white rounded-lg pl-10 pr-3 h-12 text-base text-[#222]"
+                className="rounded-lg pl-10 pr-3 h-12 text-base"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}
                 placeholder="Tìm món ăn..."
+                placeholderTextColor="rgba(30, 41, 59, 0.5)"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholderTextColor="#888"
               />
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2 pb-2">
               <TouchableOpacity
-                className={`px-4 py-1.5 rounded-full border mr-2 ${
-                  filterCategory === "all"
-                    ? "bg-green-700 border-green-700"
-                    : "bg-white border-[#eee]"
-                }`}
+                className="px-4 py-1.5 rounded-full border mr-2"
+                style={filterCategory === "all" ? {
+                  backgroundColor: 'rgba(34, 197, 94, 0.4)',
+                  borderColor: 'rgba(255, 255, 255, 0.6)',
+                  borderWidth: 1,
+                } : {
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                  borderWidth: 1,
+                }}
                 onPress={() => setFilterCategory("all")}
               >
                 <Text
-                  className={`text-base font-semibold ${
-                    filterCategory === "all" ? "text-white" : "text-[#222]"
-                  }`}
+                  className="text-base font-semibold"
+                  style={{ color: filterCategory === "all" ? "#fff" : "#1e293b" }}
                 >
                   Tất cả
                 </Text>
@@ -173,17 +209,21 @@ const MenuScreen = () => {
               {categories.map((category) => (
                 <TouchableOpacity
                   key={category}
-                  className={`px-4 py-1.5 rounded-full border mr-2 ${
-                    filterCategory === category
-                      ? "bg-green-700 border-green-700"
-                      : "bg-white border-[#eee]"
-                  }`}
+                  className="px-4 py-1.5 rounded-full border mr-2"
+                  style={filterCategory === category ? {
+                    backgroundColor: 'rgba(34, 197, 94, 0.4)',
+                    borderColor: 'rgba(255, 255, 255, 0.6)',
+                    borderWidth: 1,
+                  } : {
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1,
+                  }}
                   onPress={() => setFilterCategory(category)}
                 >
                   <Text
-                    className={`text-base font-semibold ${
-                      filterCategory === category ? "text-white" : "text-[#222]"
-                    }`}
+                    className="text-base font-semibold"
+                    style={{ color: filterCategory === category ? "#fff" : "#1e293b" }}
                   >
                     {getCategoryLabel(category)}
                   </Text>
@@ -195,7 +235,7 @@ const MenuScreen = () => {
           <View className="px-4 mt-1">
             {filteredItems.length === 0 ? (
               <View className="items-center justify-center py-16 opacity-80 w-full">
-                <Text className="text-gray-400 text-xl mt-3 text-center">
+                <Text className="text-xl mt-3 text-center" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                   Không tìm thấy món ăn nào
                 </Text>
               </View>
@@ -206,7 +246,19 @@ const MenuScreen = () => {
                     key={item.id}
                     className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4"
                   >
-                    <View className="overflow-hidden rounded-2xl bg-white shadow-sm">
+                    <View 
+                      className="overflow-hidden rounded-2xl"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.4)',
+                        shadowColor: '#000',
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.1,
+                        shadowRadius: 12,
+                        elevation: 5,
+                      }}
+                    >
                       <View className="aspect-[4/3] bg-gray-100 relative w-full items-center justify-center">
                         <Image
                           source={{ uri: item.image_url || defaultImg }}
@@ -216,50 +268,70 @@ const MenuScreen = () => {
                         />
                         {!item.is_available && (
                           <View className="absolute inset-0 bg-black/50 items-center justify-center z-10">
-                            <Text className="bg-red-500 text-white font-bold px-2 py-1 rounded-full">
-                              Hết hàng
-                            </Text>
+                            <View
+                              className="px-2 py-1 rounded-full"
+                              style={{
+                                backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.5)',
+                              }}
+                            >
+                              <Text className="text-white font-bold">Hết hàng</Text>
+                            </View>
                           </View>
                         )}
                       </View>
                       <View className="p-4 space-y-3">
                         <View className="flex-row items-start justify-between gap-2 mb-1">
-                          <Text className="font-semibold text-lg flex-1" numberOfLines={1}>
+                          <Text className="font-semibold text-lg flex-1" style={{ color: '#1e293b' }} numberOfLines={1}>
                             {item.name}
                           </Text>
-                          <View className={`px-3 py-1 rounded-full ${categoryColors[item.category]} ml-2`}>
+                          <View 
+                            className={`px-3 py-1 rounded-full ml-2 ${categoryColors[item.category]}`}
+                            style={{ borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}
+                          >
                             <Text className="text-xs text-white font-bold" numberOfLines={1}>
                               {getCategoryLabel(item.category)}
                             </Text>
                           </View>
                         </View>
-                        <Text className="text-sm text-gray-500" numberOfLines={2}>
+                        <Text className="text-sm" style={{ color: 'rgba(30, 41, 59, 0.7)' }} numberOfLines={2}>
                           {item.description}
                         </Text>
                         <View className="flex-row items-center justify-between mt-1">
-                          <Text className="text-lg font-bold text-green-700">
+                          <Text className="text-lg font-bold" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>
                             {formatCurrency(item.price)}
                           </Text>
-                          <Text className="text-sm text-gray-400">
+                          <Text className="text-sm" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                             {item.prep_time_minutes} phút
                           </Text>
                         </View>
                         <View className="flex-row gap-2 mt-3">
                           <TouchableOpacity
-                            className="flex-1 border border-gray-300 bg-white rounded-lg flex-row items-center justify-center py-2 mr-2"
+                            className="flex-1 rounded-lg flex-row items-center justify-center py-2 mr-2"
+                            style={{
+                              backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                              borderWidth: 1,
+                              borderColor: 'rgba(255, 255, 255, 0.5)',
+                            }}
                             onPress={() => handleEdit(item)}
                           >
-                            <Edit size={18} color="#38a169" className="mr-1" />
-                            <Text className="text-green-700 font-bold ml-1">
+                            <Edit size={18} color="rgba(34, 197, 94, 0.9)" className="mr-1" />
+                            <Text className="font-bold ml-1" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>
                               Sửa
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
-                            className="flex-1 border border-gray-300 bg-white rounded-lg flex-row items-center justify-center py-2"
+                            className="flex-1 rounded-lg flex-row items-center justify-center py-2"
+                            style={{
+                              backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                              borderWidth: 1,
+                              borderColor: 'rgba(255, 255, 255, 0.5)',
+                            }}
                             onPress={() => setDeleteId(item.id)}
                           >
-                            <Trash2 size={18} color="#ef4444" className="mr-1" />
-                            <Text className="text-red-500 font-bold ml-1">Xóa</Text>
+                            <Trash2 size={18} color="rgba(239, 68, 68, 0.9)" className="mr-1" />
+                            <Text className="font-bold ml-1" style={{ color: 'rgba(239, 68, 68, 0.9)' }}>Xóa</Text>
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -285,21 +357,43 @@ const MenuScreen = () => {
         visible={!!deleteId}
         onRequestClose={() => setDeleteId(null)}
       >
-        <View className="flex-1 justify-center items-center bg-black/30">
-          <View className="bg-white w-[87%] rounded-2xl px-6 py-6">
-            <Text className="font-bold text-lg mb-2">Xác nhận xóa</Text>
-            <Text className="text-sm text-gray-500 mb-5">
+        <View className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}>
+          <View 
+            className="w-[87%] rounded-2xl px-6 py-6"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.25)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.4)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.2,
+              shadowRadius: 20,
+              elevation: 10,
+            }}
+          >
+            <Text className="font-bold text-lg mb-2" style={{ color: '#1e293b' }}>Xác nhận xóa</Text>
+            <Text className="text-sm mb-5" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>
               Bạn có chắc chắn muốn xóa món ăn này? Hành động này không thể hoàn tác.
             </Text>
             <View className="flex-row justify-end gap-3 mt-3">
               <TouchableOpacity
-                className="px-6 py-2 rounded-md border border-gray-400 bg-white"
+                className="px-6 py-2 rounded-md"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
                 onPress={() => setDeleteId(null)}
               >
-                <Text className="font-medium">Hủy</Text>
+                <Text className="font-medium" style={{ color: '#1e293b' }}>Hủy</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className="px-6 py-2 rounded-md bg-red-600"
+                className="px-6 py-2 rounded-md"
+                style={{
+                  backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
                 onPress={handleDeleteConfirm}
               >
                 <Text className="font-medium text-white">Xóa</Text>

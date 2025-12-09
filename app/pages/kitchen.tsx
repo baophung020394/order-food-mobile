@@ -101,22 +101,39 @@ const Kitchen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8F8F8]">
-      <View className="flex-1 bg-[#F8F8F8]">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
+      <View className="flex-1">
         {/* Header */}
-        <View className="border-b border-[#E0E0E0] bg-white px-5 py-2 shadow-sm">
+        <View 
+          className="px-5 py-2"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
           <View className="flex-row items-center gap-3">
             <Pressable
-              className="rounded-full bg-gray-100 p-1 mr-2"
+              className="rounded-full p-1 mr-2"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+              }}
               onPress={() => router.back()}
             >
-              <ArrowLeft size={22} color="#222" />
+              <ArrowLeft size={22} color="#1e293b" />
             </Pressable>
             <View>
-              <Text className="text-xl font-bold text-[#222]">
+              <Text className="text-xl font-bold" style={{ color: '#1e293b' }}>
                 Màn hình bếp
               </Text>
-              <Text className="text-base text-gray-500 mt-1">
+              <Text className="text-base mt-1" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>
                 {filteredItems.length} món đang chờ
               </Text>
             </View>
@@ -130,17 +147,21 @@ const Kitchen = () => {
           className="py-0 my-3 px-3"
         >
           <TouchableOpacity
-            className={`rounded-full px-4 py-1.5 mr-2 border ${
-              filterStatus === "all"
-                ? "bg-green-700 border-green-700"
-                : "bg-white border-[#eee]"
-            }`}
+            className="rounded-full px-4 py-1.5 mr-2 border"
+            style={filterStatus === "all" ? {
+              backgroundColor: 'rgba(34, 197, 94, 0.4)',
+              borderColor: 'rgba(255, 255, 255, 0.6)',
+              borderWidth: 1,
+            } : {
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              borderWidth: 1,
+            }}
             onPress={() => setFilterStatus("all")}
           >
             <Text
-              className={`text-base font-semibold ${
-                filterStatus === "all" ? "text-white" : "text-[#222]"
-              }`}
+              className="text-base font-semibold"
+              style={{ color: filterStatus === "all" ? "#fff" : "#1e293b" }}
             >
               Đang làm
             </Text>
@@ -150,17 +171,21 @@ const Kitchen = () => {
             .map(([status, config]) => (
               <TouchableOpacity
                 key={status}
-                className={`rounded-full px-4 py-1.5 mr-2 border ${
-                  filterStatus === status
-                    ? "bg-green-700 border-green-700"
-                    : "bg-white border-[#eee]"
-                }`}
+                className="rounded-full px-4 py-1.5 mr-2 border"
+                style={filterStatus === status ? {
+                  backgroundColor: 'rgba(34, 197, 94, 0.4)',
+                  borderColor: 'rgba(255, 255, 255, 0.6)',
+                  borderWidth: 1,
+                } : {
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                  borderWidth: 1,
+                }}
                 onPress={() => setFilterStatus(status as ItemStatus)}
               >
                 <Text
-                  className={`text-base font-semibold ${
-                    filterStatus === status ? "text-white" : "text-[#222]"
-                  }`}
+                  className="text-base font-semibold"
+                  style={{ color: filterStatus === status ? "#fff" : "#1e293b" }}
                 >
                   {config.label}
                 </Text>
@@ -176,20 +201,30 @@ const Kitchen = () => {
               return (
                 <View
                   key={item.id}
-                  className="w-full bg-white rounded-2xl p-4 my-2 mr-3 shadow-sm flex-1 min-w-[160px] max-w-[480px]"
+                  className="w-full rounded-2xl p-4 my-2 mr-3 flex-1 min-w-[160px] max-w-[480px]"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.4)',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 12,
+                    elevation: 5,
+                  }}
                 >
                   <View className="flex-row justify-between items-start">
                     <View className="flex-1">
-                      <Text className="font-bold text-lg text-[#222]">
+                      <Text className="font-bold text-lg" style={{ color: '#1e293b' }}>
                         Bàn {getTableNumber(item.table_id)}
                       </Text>
-                      <Text className="text-[13px] text-gray-400 mt-1">
+                      <Text className="text-[13px] mt-1" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                         {formatTime(item.received_at)}
                       </Text>
                     </View>
                     <View
                       className={`flex-row items-center px-3 py-1 rounded-full ml-2 ${config.color}`}
-                      style={{ gap: 4 }}
+                      style={{ gap: 4, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}
                     >
                       <StatusIcon
                         color="#fff"
@@ -203,43 +238,69 @@ const Kitchen = () => {
                   </View>
                   <View className="mt-2">
                     <View className="flex-row justify-between items-center">
-                      <Text className="font-semibold text-base text-[#212121]">
+                      <Text className="font-semibold text-base" style={{ color: '#1e293b' }}>
                         {item.menu_item_name}
                       </Text>
-                      <Text className="font-bold text-lg text-[#181818]">
+                      <Text className="font-bold text-lg" style={{ color: '#1e293b' }}>
                         x{item.quantity}
                       </Text>
                     </View>
                     {item.note ? (
-                      <Text className="text-xs text-gray-500 bg-gray-100 px-2 py-1 mt-1 rounded italic">
-                        Ghi chú: {item.note}
-                      </Text>
+                      <View 
+                        className="px-2 py-1 mt-1 rounded"
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.4)',
+                        }}
+                      >
+                        <Text className="text-xs italic" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>
+                          Ghi chú: {item.note}
+                        </Text>
+                      </View>
                     ) : null}
                   </View>
                   <View className="flex-row mt-3">
                     {item.status === "waiting" && (
                       <TouchableOpacity
-                        className="flex-1 bg-gray-100 rounded-lg items-center justify-center py-2 mr-2"
+                        className="flex-1 rounded-lg items-center justify-center py-2 mr-2"
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.5)',
+                        }}
                         onPress={() => handleStatusChange(item.id, "preparing")}
                       >
-                        <Text className="font-bold text-green-800 text-base">
+                        <Text className="font-bold text-base" style={{ color: 'rgba(34, 197, 94, 0.9)' }}>
                           Bắt đầu làm
                         </Text>
                       </TouchableOpacity>
                     )}
                     {item.status === "preparing" && (
                       <TouchableOpacity
-                        className="flex-1 bg-green-500 rounded-lg items-center justify-center py-2 mr-2"
+                        className="flex-1 rounded-lg items-center justify-center py-2 mr-2"
+                        style={{
+                          backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.5)',
+                        }}
                         onPress={() => handleStatusChange(item.id, "ready")}
                       >
-                        <Text className="font-bold text-white text-base">
+                        <Text className="font-bold text-base text-white">
                           Hoàn thành
                         </Text>
                       </TouchableOpacity>
                     )}
                     {item.status === "ready" && (
-                      <View className="flex-1 bg-gray-100 rounded-lg items-center justify-center py-2 mr-2">
-                        <Text className="font-bold text-gray-400 text-base">
+                      <View 
+                        className="flex-1 rounded-lg items-center justify-center py-2 mr-2"
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.4)',
+                        }}
+                      >
+                        <Text className="font-bold text-base" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                           Chờ phục vụ
                         </Text>
                       </View>
@@ -251,8 +312,8 @@ const Kitchen = () => {
           </View>
           {filteredItems.length === 0 && (
             <View className="items-center justify-center mt-16 mb-6 opacity-80">
-              <ChefHat size={65} color="#9CA3AF" style={{ opacity: 0.5 }} />
-              <Text className="text-gray-400 text-xl mt-3 text-center">
+              <ChefHat size={65} color="rgba(30, 41, 59, 0.4)" style={{ opacity: 0.5 }} />
+              <Text className="text-xl mt-3 text-center" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                 Không có món nào cần làm
               </Text>
             </View>

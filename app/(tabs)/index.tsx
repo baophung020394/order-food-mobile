@@ -88,68 +88,128 @@ export default function Dashboard() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-zinc-50">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
       {/* Header */}
-      <View className="border-b bg-white shadow-sm flex-row items-center justify-between px-4 py-4">
+      <View 
+        className="flex-row items-center justify-between px-4 py-4"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.25)',
+          borderBottomWidth: 1,
+          borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 3,
+        }}
+      >
         <View className="flex-row items-center gap-x-3">
-          <View className="w-10 h-10 bg-green-700 rounded-full items-center justify-center mr-3">
+          <View 
+            className="w-10 h-10 rounded-full items-center justify-center mr-3"
+            style={{ backgroundColor: 'rgba(34, 197, 94, 0.4)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.5)' }}
+          >
             <UtensilsCrossed color="#fff" size={22} />
           </View>
           <View>
-            <Text className="text-xl font-bold text-zinc-900">
+            <Text className="text-xl font-bold" style={{ color: '#1e293b' }}>
               Restaurant POS
             </Text>
-            <Text className="text-sm text-gray-500">{user?.full_name}</Text>
+            <Text className="text-sm" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>{user?.full_name}</Text>
           </View>
         </View>
         <TouchableOpacity
-          className="flex-row items-center border border-gray-300 rounded-md px-3 py-2 bg-white active:bg-gray-100"
+          className="flex-row items-center rounded-md px-3 py-2"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+          }}
           onPress={handleLogout}
           activeOpacity={0.7}
         >
-          <LogOut size={18} color="#222" className="mr-1" />
-          <Text className="text-sm font-medium ml-1">Đăng xuất</Text>
+          <LogOut size={18} color="#1e293b" className="mr-1" />
+          <Text className="text-sm font-medium ml-1" style={{ color: '#1e293b' }}>Đăng xuất</Text>
         </TouchableOpacity>
       </View>
       {/* Quick Actions */}
       <View className="flex-row flex-wrap justify-between px-3 mt-4 mb-2 gap-2">
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-20 rounded-xl items-center justify-center mr-2"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.1,
+            shadowRadius: 12,
+            elevation: 5,
+          }}
           onPress={() => router.push("/(tabs)/orders")}
           activeOpacity={0.80}
         >
-          <ClipboardList size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">
+          <ClipboardList size={28} color="#1e293b" />
+          <Text className="mt-2 text-base font-semibold" style={{ color: '#1e293b' }}>
             Đơn hàng
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-20 rounded-xl items-center justify-center mr-2"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.1,
+            shadowRadius: 12,
+            elevation: 5,
+          }}
           onPress={() => router.push("/pages/kitchen")}
           activeOpacity={0.80}
         >
-          <ChefHat size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Bếp</Text>
+          <ChefHat size={28} color="#1e293b" />
+          <Text className="mt-2 text-base font-semibold" style={{ color: '#1e293b' }}>Bếp</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center mr-2 shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-20 rounded-xl items-center justify-center mr-2"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.1,
+            shadowRadius: 12,
+            elevation: 5,
+          }}
           onPress={() => router.push("/pages/Menu")}
           activeOpacity={0.80}
         >
-          <MenuIcon size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Thực đơn</Text>
+          <MenuIcon size={28} color="#1e293b" />
+          <Text className="mt-2 text-base font-semibold" style={{ color: '#1e293b' }}>Thực đơn</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 h-20 bg-white rounded-xl items-center justify-center shadow-sm active:scale-95 active:bg-gray-100"
-          style={{ minWidth: 78 }}
+          className="flex-1 h-20 rounded-xl items-center justify-center"
+          style={{ 
+            minWidth: 78,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.1,
+            shadowRadius: 12,
+            elevation: 5,
+          }}
           onPress={() => router.push("/(tabs)/profile")}
           activeOpacity={0.80}
         >
-          <User size={28} color="#4B5563" />
-          <Text className="mt-2 text-base font-semibold text-gray-800">Tài khoản</Text>
+          <User size={28} color="#1e293b" />
+          <Text className="mt-2 text-base font-semibold" style={{ color: '#1e293b' }}>Tài khoản</Text>
         </TouchableOpacity>
       </View>
       {/* Content */}
@@ -164,12 +224,23 @@ export default function Dashboard() {
             return (
               <View
                 key={status}
-                className={`w-[47%] bg-white rounded-xl p-4 flex-row items-center justify-between shadow-sm mb-2 active:scale-95`}
-                style={{ marginBottom: 10, minWidth: 140 }}
+                className="w-[47%] rounded-xl p-4 flex-row items-center justify-between mb-2"
+                style={{ 
+                  marginBottom: 10, 
+                  minWidth: 140,
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.4)',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 12,
+                  elevation: 5,
+                }}
               >
                 <View>
-                  <Text className="text-sm text-gray-400">{config.label}</Text>
-                  <Text className="text-2xl font-bold mt-1">{count}</Text>
+                  <Text className="text-sm" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>{config.label}</Text>
+                  <Text className="text-2xl font-bold mt-1" style={{ color: '#1e293b' }}>{count}</Text>
                 </View>
                 <View className={`w-[18px] h-[18px] rounded-full ${config.bg}`} />
               </View>
@@ -180,8 +251,8 @@ export default function Dashboard() {
         {Object.entries(groupedTables).map(([location, locationTables]) => (
           <View key={location} className="mt-3">
             <View className="flex-row gap-2 items-center mb-4">
-              <Users size={18} color="#222" />
-              <Text className="text-lg font-semibold capitalize">
+              <Users size={18} color="#1e293b" />
+              <Text className="text-lg font-semibold capitalize" style={{ color: '#1e293b' }}>
                 Khu vực: {location}
               </Text>
             </View>
@@ -192,28 +263,36 @@ export default function Dashboard() {
                   <Pressable
                     key={table.id}
                     onPress={() => handleTableClick(table)}
-                    className={`mb-3 active:scale-95 ${config.bg}`}
+                    className="mb-3"
                     style={{
                       minWidth: 105,
                       width: 108,
                       borderRadius: 16,
                       marginRight: 12,
-                      shadowColor: "#aaa",
-                      shadowOpacity: 0.08,
-                      elevation: 2,
+                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.4)',
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 4 },
+                      shadowOpacity: 0.15,
+                      shadowRadius: 12,
+                      elevation: 6,
                     }}
                   >
                     <View className="p-4 items-center justify-center">
-                      <Text className="text-2xl font-bold text-white mb-1">
+                      <Text className="text-2xl font-bold mb-1" style={{ color: '#1e293b' }}>
                         {table.table_number}
                       </Text>
-                      <View className="flex-row items-center bg-white/20 rounded-full px-3 py-0.5 mb-1 mt-1">
-                        <Users size={14} color="#fff" style={{marginRight: 4}} />
-                        <Text className="ml-1 text-xs text-white font-semibold">
+                      <View 
+                        className="flex-row items-center rounded-full px-3 py-0.5 mb-1 mt-1"
+                        style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }}
+                      >
+                        <Users size={14} color="#1e293b" style={{marginRight: 4}} />
+                        <Text className="ml-1 text-xs font-semibold" style={{ color: '#1e293b' }}>
                           {table.seats} chỗ
                         </Text>
                       </View>
-                      <Text className="text-white text-xs font-medium mt-1">
+                      <Text className="text-xs font-medium mt-1" style={{ color: '#1e293b' }}>
                         {config.label}
                       </Text>
                     </View>

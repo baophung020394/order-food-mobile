@@ -92,41 +92,72 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 h-full w-full">
-      <ScrollView className="flex-1 bg-gradient-to-br from-[#388E3C]/10 via-[#fff] to-[#E0E0E0]/10 p-4">
+    <SafeAreaView className="flex-1 h-full w-full" style={{ backgroundColor: 'rgba(147, 197, 253, 0.3)' }}>
+      <ScrollView className="flex-1 p-4">
         <KeyboardAvoidingView
           className="flex-1 justify-center items-center"
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6">
+          <View 
+            className="w-full max-w-md mx-auto rounded-2xl p-6"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.25)',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.4)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.15,
+              shadowRadius: 20,
+              elevation: 8,
+            }}
+          >
             <View className="items-center mb-6">
-              <View className="bg-[#388E3C] w-16 h-16 rounded-full items-center justify-center mb-2">
+              <View 
+                className="w-16 h-16 rounded-full items-center justify-center mb-2"
+                style={{
+                  backgroundColor: 'rgba(34, 197, 94, 0.4)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
+              >
                 <ChefHat color="#fff" size={32} />
               </View>
-              <Text className="text-3xl font-bold mb-1 text-center">
+              <Text className="text-3xl font-bold mb-1 text-center" style={{ color: '#1e293b' }}>
                 Restaurant POS
               </Text>
-              <Text className="text-base text-gray-600 text-center mb-2">
+              <Text className="text-base text-center mb-2" style={{ color: 'rgba(30, 41, 59, 0.7)' }}>
                 Đăng nhập vào hệ thống quản lý nhà hàng
               </Text>
             </View>
 
             {/* Form */}
             <View className="mb-4">
-              <Text className="font-medium mb-1">Tên đăng nhập</Text>
+              <Text className="font-medium mb-1" style={{ color: '#1e293b' }}>Tên đăng nhập</Text>
               <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 mb-2 text-base"
+                className="rounded-xl px-4 h-12 mb-2 text-base"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
                 placeholder="Nhập tên đăng nhập"
+                placeholderTextColor="rgba(30, 41, 59, 0.5)"
                 value={username}
                 onChangeText={setUsername}
                 editable={!loading}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              <Text className="font-medium mb-1">Mật khẩu</Text>
+              <Text className="font-medium mb-1" style={{ color: '#1e293b' }}>Mật khẩu</Text>
               <TextInput
-                className="bg-[#F8F8F8] border border-[#E0E0E0] rounded-xl px-4 h-12 text-base"
+                className="rounded-xl px-4 h-12 text-base"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                }}
                 placeholder="Nhập mật khẩu"
+                placeholderTextColor="rgba(30, 41, 59, 0.5)"
                 value={password}
                 onChangeText={setPassword}
                 editable={!loading}
@@ -134,7 +165,12 @@ const SignIn = () => {
               />
             </View>
             <Pressable
-              className={`w-full rounded-xl bg-[#388E3C] h-12 flex-row items-center justify-center mt-2 ${loading ? "opacity-60" : ""}`}
+              className={`w-full rounded-xl h-12 flex-row items-center justify-center mt-2 ${loading ? "opacity-60" : ""}`}
+              style={{
+                backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+              }}
               onPress={handleLogin}
               disabled={loading}
             >
@@ -148,8 +184,15 @@ const SignIn = () => {
             </Pressable>
 
             {/* Demo Accounts */}
-            <View className="mt-6 p-4 bg-[#F5F5F5] rounded-lg border border-[#E0E0E0]">
-              <Text className="font-semibold mb-2 text-[#222]">
+            <View 
+              className="mt-6 p-4 rounded-lg"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.4)',
+              }}
+            >
+              <Text className="font-semibold mb-2" style={{ color: '#1e293b' }}>
                 Tài khoản demo (nhấn để điền):
               </Text>
               <View className="gap-2">
@@ -158,11 +201,16 @@ const SignIn = () => {
                     key={i}
                     onPress={() => fillDemoAccount(acc)}
                     disabled={loading}
-                    className="bg-white rounded-lg p-2 border border-[#E0E0E0]"
+                    className="rounded-lg p-2"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.5)',
+                    }}
                   >
                     <View className="flex-row justify-between items-center">
-                      <Text className="text-[#666] text-sm font-medium">{acc.username}</Text>
-                      <Text className="text-[#888] text-xs">
+                      <Text className="text-sm font-medium" style={{ color: 'rgba(30, 41, 59, 0.8)' }}>{acc.username}</Text>
+                      <Text className="text-xs" style={{ color: 'rgba(30, 41, 59, 0.6)' }}>
                         {acc.password}
                       </Text>
                     </View>
