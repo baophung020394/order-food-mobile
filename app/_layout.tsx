@@ -19,6 +19,7 @@ export default function RootLayout() {
               <Stack.Screen name="table/[id]" options={{ headerShown: false }} />
               <Stack.Screen name="pages/kitchen" options={{ headerShown: false }} />
               <Stack.Screen name="pages/Menu" options={{ headerShown: false }} />
+              <Stack.Screen name="pages/create-table" options={{ headerShown: false }} />
             </Stack>
             <Toast />
           </>
