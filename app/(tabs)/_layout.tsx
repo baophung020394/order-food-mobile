@@ -1,26 +1,66 @@
 import { Tabs } from "expo-router";
-import { List, Table, User } from "lucide-react-native";
+import { ClipboardList, Table, User } from "lucide-react-native";
 import { Text, View } from "react-native";
 
 const TabIcon = ({ focused, iconName, title }: any) => {
-  const iconProps = {
-    size: focused ? 27 : 21,
-    color: focused ? "#fff" : "#bbb",
+  const iconColors: Record<string, string> = {
+    Table: "#FF6B9D",
+    List: "#4ECDC4",
+    User: "#9B59B6",
   };
+  const iconColor = iconColors[iconName] || "#667eea";
+  
   const Icon =
     iconName === "Table"
       ? Table
       : iconName === "List"
-      ? List
+      ? ClipboardList
       : iconName === "User"
       ? User
       : null;
 
   return (
-    <View className="flex flex-row items-center justify-center w-56">
-      {Icon ? <Icon {...iconProps} /> : null}
+    <View className="flex flex-col items-center justify-center" style={{ minWidth: 70 }}>
+      {Icon && (
+        <View
+          className="rounded-2xl items-center justify-center"
+          style={
+            focused
+              ? {
+                  width: 56,
+                  height: 56,
+                  backgroundColor: iconColor,
+                  shadowColor: iconColor,
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 8,
+                  elevation: 8,
+                  transform: [{ scale: 1.1 }],
+                }
+              : {
+                  width: 44,
+                  height: 44,
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                }
+          }
+        >
+          <Icon
+            size={focused ? 26 : 20}
+            color={focused ? "#fff" : "rgba(255,255,255,0.6)"}
+          />
+        </View>
+      )}
       {focused && (
-        <Text className="text-white text-base font-semibold ml-2">{title}</Text>
+        <View className="mt-1.5 px-3 py-1 rounded-full"
+          style={{ backgroundColor: `${iconColor}30` }}
+        >
+          <Text 
+            className="text-xs font-bold"
+            style={{ color: iconColor }}
+          >
+            {title}
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -32,32 +72,37 @@ const _Layout = () => {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#181828",
-          borderRadius: 30,
-          marginHorizontal: 14,
-          marginBottom: 16, // Giảm để lên cao giữa sát vùng safe
-          height: 66, // cao hơn mặc định
-          paddingTop: 8, // ĐỦ rộng, icon + label ở giữa hoàn hảo
-          paddingBottom: 10,
+          backgroundColor: "#667eea",
+          borderRadius: 32,
+          marginHorizontal: 16,
+          marginBottom: 20,
+          height: 80,
+          paddingTop: 8,
+          paddingBottom: 8,
+          paddingHorizontal: 8,
           position: "absolute",
-          shadowColor: "#0e152b",
-          shadowOpacity: 0.16,
-          shadowRadius: 10,
-          elevation: 10,
+          shadowColor: "#667eea",
+          shadowOffset: { width: 0, height: -6 },
+          shadowOpacity: 0.4,
+          shadowRadius: 16,
+          elevation: 20,
           borderTopWidth: 0,
+          borderWidth: 3,
+          borderColor: "rgba(255,255,255,0.3)",
         },
         tabBarItemStyle: {
           alignItems: "center",
           justifyContent: "center",
-          paddingTop: 4,
-          paddingBottom: 7,
+          paddingVertical: 4,
         },
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tables",
+          title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon iconName="Table" focused={focused} title="Bàn ăn" />
